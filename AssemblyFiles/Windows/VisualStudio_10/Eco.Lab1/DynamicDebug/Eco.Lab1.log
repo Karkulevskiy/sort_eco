@@ -1,0 +1,11 @@
+﻿  CEcoLab1.c
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(152): warning C4018: '<' : signed/unsigned mismatch
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(186): warning C4018: '<' : signed/unsigned mismatch
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(203): warning C4018: '<' : signed/unsigned mismatch
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(208): warning C4018: '<' : signed/unsigned mismatch
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(222): warning C4018: '<' : signed/unsigned mismatch
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(224): warning C4018: '<' : signed/unsigned mismatch
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(990,5): warning MSB8012: TargetPath(C:\Users\karku\Documents\Visual Studio 2010\Projects\Eco.Lab1\AssemblyFiles\Windows\VisualStudio_10\Eco.Lab1\DynamicDebug\1F5DF16EE1BF43B999A434ED38FE8F3A.dll) does not match the Linker's OutputFile property value (C:\Users\karku\Documents\Visual Studio 2010\Projects\Eco.Lab1\BuildFiles\Windows\x86\DynamicDebug\1F5DF16EE1BF43B999A434ED38FE8F3A.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+  LINK : ..\..\..\BuildFiles\Windows\x86\DynamicDebug\1F5DF16EE1BF43B999A434ED38FE8F3A.dll not found or not built by the last incremental link; performing full link
+     Creating library C:\Users\karku\Documents\Visual Studio 2010\Projects\Eco.Lab1\AssemblyFiles\Windows\VisualStudio_10\Eco.Lab1\DynamicDebug\1F5DF16EE1BF43B999A434ED38FE8F3A.lib and object C:\Users\karku\Documents\Visual Studio 2010\Projects\Eco.Lab1\AssemblyFiles\Windows\VisualStudio_10\Eco.Lab1\DynamicDebug\1F5DF16EE1BF43B999A434ED38FE8F3A.exp
+  Eco.Lab1.vcxproj -> C:\Users\karku\Documents\Visual Studio 2010\Projects\Eco.Lab1\AssemblyFiles\Windows\VisualStudio_10\Eco.Lab1\DynamicDebug\1F5DF16EE1BF43B999A434ED38FE8F3A.dll
