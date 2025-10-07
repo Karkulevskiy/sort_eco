@@ -1,5 +1,11 @@
 ﻿  CEcoLab1Factory.c
   CEcoLab1.c
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(152): warning C4018: '<' : signed/unsigned mismatch
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(186): warning C4018: '<' : signed/unsigned mismatch
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(203): warning C4018: '<' : signed/unsigned mismatch
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(208): warning C4018: '<' : signed/unsigned mismatch
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(222): warning C4018: '<' : signed/unsigned mismatch
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(224): warning C4018: '<' : signed/unsigned mismatch
   Generating Code...
 C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(1151,5): warning MSB8012: TargetPath(C:\Users\karku\Documents\Visual Studio 2010\Projects\Eco.Lab1\AssemblyFiles\Windows\VisualStudio_10\Eco.Lab1\StaticDebug\1F5DF16EE1BF43B999A434ED38FE8F3A.lib) does not match the Library's OutputFile property value (C:\Users\karku\Documents\Visual Studio 2010\Projects\Eco.Lab1\BuildFiles\Windows\x86\StaticDebug\1F5DF16EE1BF43B999A434ED38FE8F3A.lib). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Lib.OutputFile).
   Eco.Lab1.vcxproj -> C:\Users\karku\Documents\Visual Studio 2010\Projects\Eco.Lab1\AssemblyFiles\Windows\VisualStudio_10\Eco.Lab1\StaticDebug\1F5DF16EE1BF43B999A434ED38FE8F3A.lib
