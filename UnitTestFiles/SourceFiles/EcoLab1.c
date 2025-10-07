@@ -110,6 +110,7 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
         if (result != ERR_ECO_SUCCESES)
         {
             pIMem->pVTbl->Free(pIMem, generated_arr);
+            pIMem->pVTbl->Free(pIMem, generated_arr);
             goto Release;
         }
 
@@ -119,10 +120,14 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
         if (result != ERR_ECO_SUCCESES)
         {
             pIMem->pVTbl->Free(pIMem, sorted_arr);
+            pIMem->pVTbl->Free(pIMem, generated_arr);
             goto Release;
         }
         cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
         printf("CountSort (length = %u) time: %f seconds\n", length, cpu_time_used);
+
+        pIMem->pVTbl->Free(pIMem, sorted_arr);
+        pIMem->pVTbl->Free(pIMem, generated_arr);
     }
 
 Release:
