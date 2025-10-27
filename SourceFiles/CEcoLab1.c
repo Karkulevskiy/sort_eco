@@ -298,6 +298,7 @@ int16_t ECOCALLMETHOD initCEcoLab1(/*in*/ IEcoLab1Ptr_t me, /* in */ struct IEco
 {
     CEcoLab1 *pCMe = (CEcoLab1 *)me;
     IEcoInterfaceBus1 *pIBus = 0;
+    IEcoUnknown *pOuterUnknown = (IEcoUnknown *)me;
     int16_t result = -1;
 
     /* Проверка указателей */
@@ -326,14 +327,14 @@ int16_t ECOCALLMETHOD initCEcoLab1(/*in*/ IEcoLab1Ptr_t me, /* in */ struct IEco
     }
 
     // Пытаемся агрегировать CEcoCalculatorB, чтобы иметь доступ к IEcoCalculatorX
-    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorB, 0, &IID_IEcoCalculatorX, (void **)&pCMe->m_pIX);
+    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorB, pOuterUnknown, &IID_IEcoUnknown, (void **)&pCMe->m_pIX);
     if (result != 0)
     {
         // Если не получилось, то включаем IEcoCalculatorX из CEcoCalculatorA
-        result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorA, 0, &IID_IEcoCalculatorX, (void **)&pCMe->m_pIX);
+        result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorA, pOuterUnknown, &IID_IEcoUnknown, (void **)&pCMe->m_pIX);
     }
     // Пытаемся агрегировать CEcoCalculatorB, чтобы иметь доступ к IEcoCalculatorX
-    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorC, 0, &IID_IEcoCalculatorX, (void **)&pCMe->m_pIX);
+    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorC, pOuterUnknown, &IID_IEcoUnknown, (void **)&pCMe->m_pIX);
     if (result != 0)
     {
         result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorC, 0, &IID_IEcoCalculatorY, (void **)&pCMe->m_pIY);

@@ -43,7 +43,7 @@ typedef struct CEcoLab1
     IEcoSystem1 *m_pISys;
 
     // указатель на интерфейс калькулятора X
-    IEcoCalculatorX *m_pIX;
+    IEcoUnknown *m_pIX;
 
     // указатель на интерфейс калькулятора X
     IEcoCalculatorY *m_pIY;
