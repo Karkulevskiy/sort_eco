@@ -1,4 +1,12 @@
 ﻿  EcoLab1.c
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\unittestfiles\sourcefiles\ecolab1.c(65): warning C4101: 'generated_arr' : unreferenced local variable
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\unittestfiles\sourcefiles\ecolab1.c(70): warning C4101: 'cpu_time_used' : unreferenced local variable
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\unittestfiles\sourcefiles\ecolab1.c(66): warning C4101: 'length' : unreferenced local variable
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\unittestfiles\sourcefiles\ecolab1.c(68): warning C4101: 'i' : unreferenced local variable
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\unittestfiles\sourcefiles\ecolab1.c(64): warning C4101: 'sorted_arr' : unreferenced local variable
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\unittestfiles\sourcefiles\ecolab1.c(69): warning C4101: 'end' : unreferenced local variable
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\unittestfiles\sourcefiles\ecolab1.c(69): warning C4101: 'start' : unreferenced local variable
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\unittestfiles\sourcefiles\ecolab1.c(67): warning C4101: 'seed' : unreferenced local variable
 C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(990,5): warning MSB8012: TargetPath(C:\Users\karku\Documents\Visual Studio 2010\Projects\Eco.Lab1\AssemblyFiles\Windows\VisualStudio_10\Eco.Lab1UnitTest\DynamicDebug\Eco.Lab1UnitTest.exe) does not match the Linker's OutputFile property value (C:\Users\karku\Documents\Visual Studio 2010\Projects\Eco.Lab1\BuildFiles\Windows\x86\DynamicDebug\Eco.Lab1UnitTest.exe). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
 EcoLab1.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
   00000000000000000000000053595332.lib(CEcoSystem1EntryPoint.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance

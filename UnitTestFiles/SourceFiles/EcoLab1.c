@@ -24,6 +24,16 @@
 #include "IdEcoFileSystemManagement1.h"
 #include "IdEcoLab1.h"
 #include <time.h>
+#include <stdio.h>
+
+#include "C:\Users\karku\Documents\Eco.CalculatorC\SharedFiles\IEcoCalculatorX.h"
+#include "C:\Users\karku\Documents\Lesson06\Eco.CalculatorD\SharedFiles\IEcoCalculatorY.h"
+
+#include "C:\Users\karku\Documents\Lesson02\Eco.CalculatorA\SharedFiles\IdEcoCalculatorA.h"
+#include "C:\Users\karku\Documents\Lesson06\Eco.CalculatorD\SharedFiles\IdEcoCalculatorD.h"
+#include "C:\Users\karku\Documents\Lesson03\Eco.CalculatorB\SharedFiles\IdEcoCalculatorB.h"
+#include "C:\Users\karku\Documents\Lesson07\Eco.CalculatorE\SharedFiles\IdEcoCalculatorE.h"
+#include "C:\Users\karku\Documents\Eco.CalculatorC\SharedFiles\IdEcoCalculatorC.h"
 
 /*
  *
@@ -48,6 +58,9 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
     IEcoMemoryAllocator1 *pIMem = 0;
     /* Указатель на тестируемый интерфейс */
     IEcoLab1 *pIEcoLab1 = 0;
+    IEcoCalculatorX *pIX = 0;
+    IEcoCalculatorY *pIY = 0;
+
     int32_t *sorted_arr;
     int32_t *generated_arr;
     uint32_t length;
@@ -101,35 +114,57 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
         goto Release;
     }
 
-    // Test & Cmp time for CountSort
-    for (i = 1; i <= 10; i++)
+    // Включение для IEcoCalculatorX
+    result = pIEcoLab1->pVTbl->QueryInterface(pIEcoLab1, &IID_IEcoCalculatorX, (void **)&pIX);
+    printf("Addition: %d\n", pIX->pVTbl->Addition(pIX, 3, 5));
+    printf("Subtraction: %d\n", pIX->pVTbl->Subtraction(pIX, 10, 5));
+
+    // Включение для IEcoCalculatorY
+    result = pIEcoLab1->pVTbl->QueryInterface(pIEcoLab1, &IID_IEcoCalculatorY, (void **)&pIY);
+    printf("Division: %d\n", pIY->pVTbl->Division(pIY, 10, 2));
+    printf("Multiplication: %d\n", pIY->pVTbl->Multiplication(pIY, 10, 5));
+
+    // Свойства интерфейса
+    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorE, 0, &IID_IEcoCalculatorY, (void **)&pIY);
+    if (result == 0 && pIY != 0)
     {
-        length = 1000000 * i;
-        seed = i;
-        result = pIEcoLab1->pVTbl->PseudoGenerator(pIEcoLab1, length, seed, &generated_arr);
-        if (result != ERR_ECO_SUCCESES)
-        {
-            pIMem->pVTbl->Free(pIMem, generated_arr);
-            pIMem->pVTbl->Free(pIMem, generated_arr);
-            goto Release;
-        }
-
-        start = clock();
-        result = pIEcoLab1->pVTbl->CountSort(pIEcoLab1, generated_arr, length, &sorted_arr);
-        end = clock();
-        if (result != ERR_ECO_SUCCESES)
-        {
-            pIMem->pVTbl->Free(pIMem, sorted_arr);
-            pIMem->pVTbl->Free(pIMem, generated_arr);
-            goto Release;
-        }
-        cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-        printf("CountSort (length = %u) time: %f seconds\n", length, cpu_time_used);
-
-        pIMem->pVTbl->Free(pIMem, sorted_arr);
-        pIMem->pVTbl->Free(pIMem, generated_arr);
+        printf("EcoCalculatorE from IEcoCalculatorY\n");
+        /* Получение интерфейса по работе со сложением и вычитанием у компонента "B" */
+        result = pIY->pVTbl->QueryInterface(pIY, &IID_IEcoCalculatorX, (void **)&pIX);
+        printf("Addition: %d\n", pIX->pVTbl->Addition(pIX, 2, 2));
+        printf("Subtraction: %d\n", pIX->pVTbl->Subtraction(pIX, 2, 2));
+    }
+    /* Получение интерфейса по работе с умножением и делением у компонента "D" включающего компонент "A" */
+    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorD, 0, &IID_IEcoCalculatorY, (void **)&pIY);
+    if (result == 0 && pIY != 0)
+    {
+        printf("EcoCalculatorD from IEcoCalculatorY\n");
+        /* Получение интерфейса по работе со сложением и вычитанием у компонента "A" */
+        result = pIY->pVTbl->QueryInterface(pIY, &IID_IEcoCalculatorX, (void **)&pIX);
+        printf("Addition: %d\n", pIX->pVTbl->Addition(pIX, 2, 2));
+        printf("Subtraction: %d\n", pIX->pVTbl->Subtraction(pIX, 2, 2));
     }
 
+    /* Получение интерфейса по работе с умножением и делением у компонента "C" */
+    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorC, 0, &IID_IEcoCalculatorY, (void **)&pIY);
+    if (result == 0 && pIY != 0)
+    {
+        printf("EcoCalculatorC from IEcoCalculatorY\n");
+        /* Получение интерфейса по работе со сложением и вычитанием у компонента "C" */
+        result = pIY->pVTbl->QueryInterface(pIY, &IID_IEcoCalculatorX, (void **)&pIX);
+        printf("Addition: %d\n", pIX->pVTbl->Addition(pIX, 2, 2));
+        printf("Subtraction: %d\n", pIX->pVTbl->Subtraction(pIX, 2, 2));
+    }
+    /* Получение интерфейса по работе со сложением и вычитанием у компонента "B" c поддержкой агрегирования */
+    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorB, 0, &IID_IEcoCalculatorX, (void **)&pIX);
+    if (result != 0 || pIX == 0)
+    {
+        printf("EcoCalculatorB from IEcoCalculatorX\n");
+        /* Получение интерфейса по работе со сложением и вычитанием у компонента "A" */
+        result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorA, 0, &IID_IEcoCalculatorX, (void **)&pIX);
+        printf("Addition: %d\n", pIX->pVTbl->Addition(pIX, 2, 2));
+        printf("Subtraction: %d\n", pIX->pVTbl->Subtraction(pIX, 2, 2));
+    }
 Release:
 
     /* Освобождение интерфейса для работы с интерфейсной шиной */

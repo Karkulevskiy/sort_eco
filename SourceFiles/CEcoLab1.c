@@ -21,6 +21,11 @@
 #include "IEcoInterfaceBus1.h"
 #include "IEcoInterfaceBus1MemExt.h"
 #include "CEcoLab1.h"
+#include "C:\Users\karku\Documents\Lesson02\Eco.CalculatorA\SharedFiles\IdEcoCalculatorA.h" // Только для меня, потом меняй на IdEcoCalculatorA.h
+#include "C:\Users\karku\Documents\Lesson06\Eco.CalculatorD\SharedFiles\IdEcoCalculatorD.h"
+#include "C:\Users\karku\Documents\Lesson03\Eco.CalculatorB\SharedFiles\IdEcoCalculatorB.h"
+#include "C:\Users\karku\Documents\Lesson07\Eco.CalculatorE\SharedFiles\IdEcoCalculatorE.h"
+#include "C:\Users\karku\Documents\Eco.CalculatorC\SharedFiles\IdEcoCalculatorC.h"
 
 /*
  *
@@ -42,8 +47,6 @@ static int16_t ECOCALLMETHOD CEcoLab1_QueryInterface(/* in */ IEcoLab1Ptr_t me, 
     {
         return ERR_ECO_POINTER;
     }
-
-    /* Проверка и получение запрошенного интерфейса */
     if (IsEqualUGUID(riid, &IID_IEcoLab1))
     {
         *ppv = &pCMe->m_pVTblIEcoLab1;
@@ -53,6 +56,14 @@ static int16_t ECOCALLMETHOD CEcoLab1_QueryInterface(/* in */ IEcoLab1Ptr_t me, 
     {
         *ppv = &pCMe->m_pVTblIEcoLab1;
         pCMe->m_pVTblIEcoLab1->AddRef((IEcoLab1 *)pCMe);
+    }
+    else if (IsEqualUGUID(riid, &IID_IEcoCalculatorX))
+    {
+        return pCMe->m_pIX->pVTbl->QueryInterface(pCMe->m_pIX, riid, ppv);
+    }
+    else if (IsEqualUGUID(riid, &IID_IEcoCalculatorY))
+    {
+        return pCMe->m_pIY->pVTbl->QueryInterface(pCMe->m_pIY, riid, ppv);
     }
     else
     {
@@ -235,6 +246,43 @@ static int16_t ECOCALLMETHOD CEcoLab1_CountSort(
     return ERR_ECO_SUCCESES;
 }
 
+int32_t ECOCALLMETHOD CEcoLab1_Multiplication(/* in */ struct IEcoCalculatorY *me, /* in */ int16_t a, /* in */ int16_t b)
+{
+    CEcoLab1 *pCMe = (CEcoLab1 *)me;
+    int32_t result = 0;
+
+    /* Проверка указателей */
+    if (me == 0)
+    {
+        return -1;
+    }
+
+    if (pCMe->m_pIY != 0)
+    {
+        result = pCMe->m_pIY->pVTbl->Multiplication(pCMe->m_pIY, a, b);
+    }
+
+    return result;
+}
+
+int16_t ECOCALLMETHOD CEcoLab1_Division(/* in */ struct IEcoCalculatorY *me, /* in */ int16_t a, /* in */ int16_t b)
+{
+    CEcoLab1 *pCMe = (CEcoLab1 *)me;
+    int16_t result = 0;
+
+    /* Проверка указателей */
+    if (me == 0)
+    {
+        return -1;
+    }
+
+    if (pCMe->m_pIY != 0)
+    {
+        result = pCMe->m_pIY->pVTbl->Division(pCMe->m_pIY, a, b);
+    }
+
+    return result;
+}
 /*
  *
  * <сводка>
@@ -270,7 +318,27 @@ int16_t ECOCALLMETHOD initCEcoLab1(/*in*/ IEcoLab1Ptr_t me, /* in */ struct IEco
         return result;
     }
 
-    /* Сохранение указателя на системный интерфейс */
+    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorD, 0, &IID_IEcoCalculatorY, (void **)&pCMe->m_pIY);
+    if (result != 0 || pCMe->m_pIY == 0)
+    {
+        // Если не получилось, то включаем IEcoCalculatorY из CEcoCalculatorE
+        result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorE, 0, &IID_IEcoCalculatorY, (void **)&pCMe->m_pIY);
+    }
+
+    // Пытаемся агрегировать CEcoCalculatorB, чтобы иметь доступ к IEcoCalculatorX
+    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorB, 0, &IID_IEcoCalculatorX, (void **)&pCMe->m_pIX);
+    if (result != 0)
+    {
+        // Если не получилось, то включаем IEcoCalculatorX из CEcoCalculatorA
+        result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorA, 0, &IID_IEcoCalculatorX, (void **)&pCMe->m_pIX);
+    }
+    // Пытаемся агрегировать CEcoCalculatorB, чтобы иметь доступ к IEcoCalculatorX
+    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorC, 0, &IID_IEcoCalculatorX, (void **)&pCMe->m_pIX);
+    if (result != 0)
+    {
+        result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorC, 0, &IID_IEcoCalculatorY, (void **)&pCMe->m_pIY);
+    }
+
     pCMe->m_pISys = (IEcoSystem1 *)pIUnkSystem;
 
     /* Освобождение */
@@ -279,7 +347,6 @@ int16_t ECOCALLMETHOD initCEcoLab1(/*in*/ IEcoLab1Ptr_t me, /* in */ struct IEco
     return result;
 }
 
-/* Create Virtual Table IEcoLab1 */
 IEcoLab1VTbl g_x277FC00C35624096AFCFC125B94EEC90VTbl = {
     CEcoLab1_QueryInterface,
     CEcoLab1_AddRef,
@@ -287,17 +354,13 @@ IEcoLab1VTbl g_x277FC00C35624096AFCFC125B94EEC90VTbl = {
     CEcoLab1_CountSort,
     CEcoLab1_PseudoGenerator};
 
-/*
- *
- * <сводка>
- *   Функция Create
- * </сводка>
- *
- * <описание>
- *   Функция создания экземпляра
- * </описание>
- *
- */
+IEcoCalculatorYVTbl g_xBD6414C29096423EA90C04D77AFD1CADVTblLab1 = {
+    CEcoLab1_QueryInterface,
+    CEcoLab1_AddRef,
+    CEcoLab1_Release,
+    CEcoLab1_Multiplication,
+    CEcoLab1_Division};
+
 int16_t ECOCALLMETHOD createCEcoLab1(/* in */ IEcoUnknown *pIUnkSystem, /* in */ IEcoUnknown *pIUnkOuter, /* out */ IEcoLab1 **ppIEcoLab1)
 {
     int16_t result = -1;
@@ -360,7 +423,8 @@ int16_t ECOCALLMETHOD createCEcoLab1(/* in */ IEcoUnknown *pIUnkSystem, /* in */
     /* Создание таблицы функций интерфейса IEcoLab1 */
     pCMe->m_pVTblIEcoLab1 = &g_x277FC00C35624096AFCFC125B94EEC90VTbl;
 
-    /* Возврат указателя на интерфейс */
+    pCMe->m_pVTblIY = &g_xBD6414C29096423EA90C04D77AFD1CADVTblLab1;
+
     *ppIEcoLab1 = (IEcoLab1 *)pCMe;
 
     /* Освобождение */
