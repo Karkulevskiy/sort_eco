@@ -21,11 +21,11 @@
 #include "IEcoInterfaceBus1.h"
 #include "IEcoInterfaceBus1MemExt.h"
 #include "CEcoLab1.h"
-#include "C:\Users\karku\Documents\Lesson02\Eco.CalculatorA\SharedFiles\IdEcoCalculatorA.h" // Только для меня, потом меняй на IdEcoCalculatorA.h
-#include "C:\Users\karku\Documents\Lesson06\Eco.CalculatorD\SharedFiles\IdEcoCalculatorD.h"
-#include "C:\Users\karku\Documents\Lesson03\Eco.CalculatorB\SharedFiles\IdEcoCalculatorB.h"
-#include "C:\Users\karku\Documents\Lesson07\Eco.CalculatorE\SharedFiles\IdEcoCalculatorE.h"
-#include "C:\Users\karku\Documents\Eco.CalculatorC\SharedFiles\IdEcoCalculatorC.h"
+#include "IdEcoCalculatorA.h"
+#include "IdEcoCalculatorD.h"
+#include "IdEcoCalculatorB.h"
+#include "IdEcoCalculatorE.h"
+#include "IdEcoCalculatorC.h"
 
 /*
  *

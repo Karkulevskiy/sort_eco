@@ -26,14 +26,14 @@
 #include <time.h>
 #include <stdio.h>
 
-#include "C:\Users\karku\Documents\Eco.CalculatorC\SharedFiles\IEcoCalculatorX.h"
-#include "C:\Users\karku\Documents\Lesson06\Eco.CalculatorD\SharedFiles\IEcoCalculatorY.h"
+#include "IEcoCalculatorX.h"
+#include "IEcoCalculatorY.h"
 
-#include "C:\Users\karku\Documents\Lesson02\Eco.CalculatorA\SharedFiles\IdEcoCalculatorA.h"
-#include "C:\Users\karku\Documents\Lesson06\Eco.CalculatorD\SharedFiles\IdEcoCalculatorD.h"
-#include "C:\Users\karku\Documents\Lesson03\Eco.CalculatorB\SharedFiles\IdEcoCalculatorB.h"
-#include "C:\Users\karku\Documents\Lesson07\Eco.CalculatorE\SharedFiles\IdEcoCalculatorE.h"
-#include "C:\Users\karku\Documents\Eco.CalculatorC\SharedFiles\IdEcoCalculatorC.h"
+#include "IdEcoCalculatorA.h"
+#include "IdEcoCalculatorD.h"
+#include "IdEcoCalculatorB.h"
+#include "IdEcoCalculatorE.h"
+#include "IdEcoCalculatorC.h"
 
 /*
  *
@@ -162,6 +162,14 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
         printf("EcoCalculatorB from IEcoCalculatorX\n");
         /* Получение интерфейса по работе со сложением и вычитанием у компонента "A" */
         result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorA, 0, &IID_IEcoCalculatorX, (void **)&pIX);
+        printf("Addition: %d\n", pIX->pVTbl->Addition(pIX, 2, 2));
+        printf("Subtraction: %d\n", pIX->pVTbl->Subtraction(pIX, 2, 2));
+    }
+    /* Получение интерфейса по работе со сложением и вычитанием у компонента A*/
+    result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoCalculatorA, 0, &IID_IEcoCalculatorX, (void **)&pIX);
+    if (result != 0 || pIX == 0)
+    {
+        printf("EcoCalculatorA from IEcoCalculatorX\n");
         printf("Addition: %d\n", pIX->pVTbl->Addition(pIX, 2, 2));
         printf("Subtraction: %d\n", pIX->pVTbl->Subtraction(pIX, 2, 2));
     }

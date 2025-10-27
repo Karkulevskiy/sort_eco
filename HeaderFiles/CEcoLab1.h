@@ -24,8 +24,8 @@
 #include "IEcoSystem1.h"
 #include "IdEcoMemoryManager1.h"
 
-#include "C:\Users\karku\Documents\Eco.CalculatorC\SharedFiles\IEcoCalculatorX.h"
-#include "C:\Users\karku\Documents\Eco.CalculatorC\SharedFiles\IEcoCalculatorY.h"
+#include "IEcoCalculatorX.h"
+#include "IEcoCalculatorY.h"
 
 typedef struct CEcoLab1
 {
