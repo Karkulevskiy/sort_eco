@@ -25,14 +25,14 @@
 #include "IdEcoLab1.h"
 #include <time.h>
 
-#include "C:\Users\karku\Documents\Eco.CalculatorC\SharedFiles\IEcoCalculatorX.h"
-#include "C:\Users\karku\Documents\Eco.CalculatorC\SharedFiles\IEcoCalculatorY.h"
+#include "IEcoCalculatorX.h"
+#include "IEcoCalculatorY.h"
 
-#include "C:\Users\karku\Documents\Lesson02\Eco.CalculatorA\SharedFiles\IdEcoCalculatorA.h"
-#include "C:\Users\karku\Documents\Lesson06\Eco.CalculatorD\SharedFiles\IdEcoCalculatorD.h"
-#include "C:\Users\karku\Documents\Lesson03\Eco.CalculatorB\SharedFiles\IdEcoCalculatorB.h"
-#include "C:\Users\karku\Documents\Lesson07\Eco.CalculatorE\SharedFiles\IdEcoCalculatorE.h"
-#include "C:\Users\karku\Documents\Eco.CalculatorC\SharedFiles\IdEcoCalculatorC.h"
+#include "IdEcoCalculatorA.h"
+#include "IdEcoCalculatorD.h"
+#include "IdEcoCalculatorB.h"
+#include "IdEcoCalculatorE.h"
+#include "IdEcoCalculatorC.h"
 
 /*
  *
@@ -102,19 +102,31 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
         goto Release;
 
     result = pIEcoLab1->pVTbl->QueryInterface(pIEcoLab1, &IID_IEcoCalculatorX, (void **)&pIX_testing);
-    printf("IEcoCalculatorX from IEcoLab1: %s\n", (result == 0) ? "OK" : "FAILED");
-    if (pIX_testing)
+    if (result != 0)
+        printf("IEcoCalculatorX from IEcoLab1: FAILED\n");
+    else
+    {
+        printf("IEcoCalculatorX from IEcoLab1: OK\n");
         pIX_testing->pVTbl->Release(pIX_testing);
+    }
 
     result = pIEcoLab1->pVTbl->QueryInterface(pIEcoLab1, &IID_IEcoCalculatorY, (void **)&pIY_testing);
-    printf("IEcoCalculatorY from IEcoLab1: %s\n", (result == 0) ? "OK" : "FAILED");
-    if (pIY_testing)
+    if (result != 0)
+        printf("IEcoCalculatorY from IEcoLab1: FAILED\n");
+    else
+    {
+        printf("IEcoCalculatorY from IEcoLab1: OK\n");
         pIY_testing->pVTbl->Release(pIY_testing);
+    }
 
     result = pIEcoLab1->pVTbl->QueryInterface(pIEcoLab1, &IID_IEcoCalculatorY, (void **)&pIEcoLab1_testing);
-    printf("IEcoCalculatorY from IEcoLab1: %s\n", (result == 0) ? "OK" : "FAILED");
-    if (pIY_testing)
+    if (result != 0)
+        printf("IEcoCalculatorY from IEcoLab1: FAILED\n");
+    else
+    {
+        printf("IEcoCalculatorY from IEcoLab1: OK\n");
         pIEcoLab1_testing->pVTbl->Release(pIEcoLab1_testing);
+    }
 
     result = pIEcoLab1->pVTbl->QueryInterface(pIEcoLab1, &IID_IEcoCalculatorX, (void **)&pIX);
     if (result != 0 || pIX == 0)
@@ -125,34 +137,58 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
         goto Release;
 
     result = pIX->pVTbl->QueryInterface(pIX, &IID_IEcoCalculatorY, (void **)&pIY_testing);
-    printf("IEcoCalculatorY from IEcoCalculatorX: %s\n", (result == 0) ? "OK" : "FAILED");
-    if (pIY_testing)
+    if (result != 0)
+        printf("IEcoCalculatorY from IEcoCalculatorX: FAILED\n");
+    else
+    {
+        printf("IEcoCalculatorY from IEcoCalculatorX: OK\n");
         pIY_testing->pVTbl->Release(pIY_testing);
+    }
 
     result = pIX->pVTbl->QueryInterface(pIX, &IID_IEcoLab1, (void **)&pIEcoLab1_testing);
-    printf("IEcoLab1 from IEcoCalculatorX: %s\n", (result == 0) ? "OK" : "FAILED");
-    if (pIEcoLab1_testing)
+    if (result != 0)
+        printf("IEcoLab1 from IEcoCalculatorX: FAILED\n");
+    else
+    {
+        printf("IEcoLab1 from IEcoCalculatorX: OK\n");
         pIEcoLab1_testing->pVTbl->Release(pIEcoLab1_testing);
+    }
 
     result = pIX->pVTbl->QueryInterface(pIX, &IID_IEcoCalculatorX, (void **)&pIX_testing);
-    printf("IEcoCalculatorX from IEcoCalculatorX: %s\n", (result == 0) ? "OK" : "FAILED");
-    if (pIX_testing)
+    if (result != 0)
+        printf("IEcoCalculatorX from IEcoCalculatorX: FAILED\n");
+    else
+    {
+        printf("IEcoCalculatorX from IEcoCalculatorX: OK\n");
         pIX_testing->pVTbl->Release(pIX_testing);
+    }
 
     result = pIY->pVTbl->QueryInterface(pIY, &IID_IEcoCalculatorX, (void **)&pIX_testing);
-    printf("IEcoCalculatorX from IEcoCalculatorY: %s\n", (result == 0) ? "OK" : "FAILED");
-    if (pIX_testing)
+    if (result != 0)
+        printf("IEcoCalculatorX from IEcoCalculatorY: FAILED\n");
+    else
+    {
+        printf("IEcoCalculatorX from IEcoCalculatorY: OK\n");
         pIX_testing->pVTbl->Release(pIX_testing);
+    }
 
     result = pIY->pVTbl->QueryInterface(pIY, &IID_IEcoLab1, (void **)&pIEcoLab1_testing);
-    printf("IEcoLab1 from IEcoCalculatorY: %s\n", (result == 0) ? "OK" : "FAILED");
-    if (pIEcoLab1_testing)
+    if (result != 0)
+        printf("IEcoLab1 from IEcoCalculatorY: FAILED\n");
+    else
+    {
+        printf("IEcoLab1 from IEcoCalculatorY: OK\n");
         pIEcoLab1_testing->pVTbl->Release(pIEcoLab1_testing);
+    }
 
     result = pIY->pVTbl->QueryInterface(pIY, &IID_IEcoCalculatorY, (void **)&pIY_testing);
-    printf("IEcoCalculatorY from IEcoCalculatorY: %s\n", (result == 0) ? "OK" : "FAILED");
-    if (pIY_testing)
+    if (result != 0)
+        printf("IEcoCalculatorY from IEcoCalculatorY: FAILED\n");
+    else
+    {
+        printf("IEcoCalculatorY from IEcoCalculatorY: OK\n");
         pIY_testing->pVTbl->Release(pIY_testing);
+    }
 
     operation_result = pIX->pVTbl->Addition(pIX, 1, 1);
     printf("Addition: %s\n", operation_result == 2 ? "OK" : "FAILED");
