@@ -25,6 +25,15 @@
 #include "IdEcoLab1.h"
 #include <time.h>
 
+#include "C:\Users\karku\Documents\Eco.CalculatorC\SharedFiles\IEcoCalculatorX.h"
+#include "C:\Users\karku\Documents\Eco.CalculatorC\SharedFiles\IEcoCalculatorY.h"
+
+#include "C:\Users\karku\Documents\Lesson02\Eco.CalculatorA\SharedFiles\IdEcoCalculatorA.h"
+#include "C:\Users\karku\Documents\Lesson06\Eco.CalculatorD\SharedFiles\IdEcoCalculatorD.h"
+#include "C:\Users\karku\Documents\Lesson03\Eco.CalculatorB\SharedFiles\IdEcoCalculatorB.h"
+#include "C:\Users\karku\Documents\Lesson07\Eco.CalculatorE\SharedFiles\IdEcoCalculatorE.h"
+#include "C:\Users\karku\Documents\Eco.CalculatorC\SharedFiles\IdEcoCalculatorC.h"
+
 /*
  *
  * <сводка>
@@ -48,13 +57,12 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
     IEcoMemoryAllocator1 *pIMem = 0;
     /* Указатель на тестируемый интерфейс */
     IEcoLab1 *pIEcoLab1 = 0;
-    int32_t *sorted_arr;
-    int32_t *generated_arr;
-    uint32_t length;
-    uint32_t seed;
-    int32_t i;
-    clock_t start, end;
-    double cpu_time_used;
+    IEcoCalculatorX *pIX = 0;
+    IEcoCalculatorY *pIY = 0;
+    IEcoLab1 *pIEcoLab1_testing = 0;
+    IEcoCalculatorX *pIX_testing = 0;
+    IEcoCalculatorY *pIY_testing = 0;
+    int operation_result;
 
     /* Проверка и создание системного интрефейса */
     if (pISys == 0)
@@ -85,50 +93,78 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
 #endif
     /* Получение интерфейса управления памятью */
     result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoMemoryManager1, 0, &IID_IEcoMemoryAllocator1, (void **)&pIMem);
-
-    /* Проверка */
     if (result != 0 || pIMem == 0)
-    {
-        /* Освобождение системного интерфейса в случае ошибки */
         goto Release;
-    }
 
     /* Получение тестируемого интерфейса */
     result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoLab1, 0, &IID_IEcoLab1, (void **)&pIEcoLab1);
     if (result != 0 || pIEcoLab1 == 0)
-    {
-        /* Освобождение интерфейсов в случае ошибки */
         goto Release;
-    }
 
-    // Test & Cmp time for CountSort
-    for (i = 1; i <= 10; i++)
-    {
-        length = 1000000 * i;
-        seed = i;
-        result = pIEcoLab1->pVTbl->PseudoGenerator(pIEcoLab1, length, seed, &generated_arr);
-        if (result != ERR_ECO_SUCCESES)
-        {
-            pIMem->pVTbl->Free(pIMem, generated_arr);
-            pIMem->pVTbl->Free(pIMem, generated_arr);
-            goto Release;
-        }
+    result = pIEcoLab1->pVTbl->QueryInterface(pIEcoLab1, &IID_IEcoCalculatorX, (void **)&pIX_testing);
+    printf("IEcoCalculatorX from IEcoLab1: %s\n", (result == 0) ? "OK" : "FAILED");
+    if (pIX_testing)
+        pIX_testing->pVTbl->Release(pIX_testing);
 
-        start = clock();
-        result = pIEcoLab1->pVTbl->CountSort(pIEcoLab1, generated_arr, length, &sorted_arr);
-        end = clock();
-        if (result != ERR_ECO_SUCCESES)
-        {
-            pIMem->pVTbl->Free(pIMem, sorted_arr);
-            pIMem->pVTbl->Free(pIMem, generated_arr);
-            goto Release;
-        }
-        cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-        printf("CountSort (length = %u) time: %f seconds\n", length, cpu_time_used);
+    result = pIEcoLab1->pVTbl->QueryInterface(pIEcoLab1, &IID_IEcoCalculatorY, (void **)&pIY_testing);
+    printf("IEcoCalculatorY from IEcoLab1: %s\n", (result == 0) ? "OK" : "FAILED");
+    if (pIY_testing)
+        pIY_testing->pVTbl->Release(pIY_testing);
 
-        pIMem->pVTbl->Free(pIMem, sorted_arr);
-        pIMem->pVTbl->Free(pIMem, generated_arr);
-    }
+    result = pIEcoLab1->pVTbl->QueryInterface(pIEcoLab1, &IID_IEcoCalculatorY, (void **)&pIEcoLab1_testing);
+    printf("IEcoCalculatorY from IEcoLab1: %s\n", (result == 0) ? "OK" : "FAILED");
+    if (pIY_testing)
+        pIEcoLab1_testing->pVTbl->Release(pIEcoLab1_testing);
+
+    result = pIEcoLab1->pVTbl->QueryInterface(pIEcoLab1, &IID_IEcoCalculatorX, (void **)&pIX);
+    if (result != 0 || pIX == 0)
+        goto Release;
+
+    result = pIEcoLab1->pVTbl->QueryInterface(pIEcoLab1, &IID_IEcoCalculatorY, (void **)&pIY);
+    if (result != 0 || pIY == 0)
+        goto Release;
+
+    result = pIX->pVTbl->QueryInterface(pIX, &IID_IEcoCalculatorY, (void **)&pIY_testing);
+    printf("IEcoCalculatorY from IEcoCalculatorX: %s\n", (result == 0) ? "OK" : "FAILED");
+    if (pIY_testing)
+        pIY_testing->pVTbl->Release(pIY_testing);
+
+    result = pIX->pVTbl->QueryInterface(pIX, &IID_IEcoLab1, (void **)&pIEcoLab1_testing);
+    printf("IEcoLab1 from IEcoCalculatorX: %s\n", (result == 0) ? "OK" : "FAILED");
+    if (pIEcoLab1_testing)
+        pIEcoLab1_testing->pVTbl->Release(pIEcoLab1_testing);
+
+    result = pIX->pVTbl->QueryInterface(pIX, &IID_IEcoCalculatorX, (void **)&pIX_testing);
+    printf("IEcoCalculatorX from IEcoCalculatorX: %s\n", (result == 0) ? "OK" : "FAILED");
+    if (pIX_testing)
+        pIX_testing->pVTbl->Release(pIX_testing);
+
+    result = pIY->pVTbl->QueryInterface(pIY, &IID_IEcoCalculatorX, (void **)&pIX_testing);
+    printf("IEcoCalculatorX from IEcoCalculatorY: %s\n", (result == 0) ? "OK" : "FAILED");
+    if (pIX_testing)
+        pIX_testing->pVTbl->Release(pIX_testing);
+
+    result = pIY->pVTbl->QueryInterface(pIY, &IID_IEcoLab1, (void **)&pIEcoLab1_testing);
+    printf("IEcoLab1 from IEcoCalculatorY: %s\n", (result == 0) ? "OK" : "FAILED");
+    if (pIEcoLab1_testing)
+        pIEcoLab1_testing->pVTbl->Release(pIEcoLab1_testing);
+
+    result = pIY->pVTbl->QueryInterface(pIY, &IID_IEcoCalculatorY, (void **)&pIY_testing);
+    printf("IEcoCalculatorY from IEcoCalculatorY: %s\n", (result == 0) ? "OK" : "FAILED");
+    if (pIY_testing)
+        pIY_testing->pVTbl->Release(pIY_testing);
+
+    operation_result = pIX->pVTbl->Addition(pIX, 1, 1);
+    printf("Addition: %s\n", operation_result == 2 ? "OK" : "FAILED");
+
+    operation_result = pIX->pVTbl->Subtraction(pIX, 2, 1);
+    printf("Subtraction: %s\n", operation_result == 1 ? "OK" : "FAILED");
+
+    operation_result = pIY->pVTbl->Multiplication(pIY, 2, 2);
+    printf("Multiplication: %s\n", operation_result == 4 ? "OK" : "FAILED");
+
+    operation_result = pIY->pVTbl->Division(pIY, 4, 2);
+    printf("Division: %s\n", operation_result == 2 ? "OK" : "FAILED");
 
 Release:
 
