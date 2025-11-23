@@ -25,6 +25,10 @@
 #include "IdEcoLab1.h"
 #include <time.h>
 
+// "#include "IdEcoList1.h"
+#include "CEcoLab1Sink.h"
+#include "IEcoConnectionPointContainer.h"
+
 /*
  *
  * <сводка>
@@ -55,6 +59,14 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
     int32_t i;
     clock_t start, end;
     double cpu_time_used;
+    /* Указатель на интерфейс контейнера точек подключения */
+    IEcoConnectionPointContainer *pICPC = 0;
+    /* Указатель на интерфейс точки подключения */
+    IEcoConnectionPoint *pICP = 0;
+    /* Указатель на обратный интерфейс */
+    IEcoLab1Events *pIEcoLab1Sink = 0;
+    IEcoUnknown *pISinkUnk = 0;
+    uint32_t cAdvise = 0;
 
     /* Проверка и создание системного интрефейса */
     if (pISys == 0)
@@ -82,6 +94,14 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
         /* Освобождение в случае ошибки */
         goto Release;
     }
+    // /* Регистрация статического компонента для работы со списком */
+    // result = pIBus->pVTbl->RegisterComponent(pIBus, &CID_EcoList1, (IEcoUnknown *)GetIEcoComponentFactoryPtr_53884AFC93C448ECAA929C8D3A562281);
+    // if (result != 0)
+    // {
+    //     /* Освобождение в случае ошибки */
+    //     goto Release;
+    // }
+
 #endif
     /* Получение интерфейса управления памятью */
     result = pIBus->pVTbl->QueryComponent(pIBus, &CID_EcoMemoryManager1, 0, &IID_IEcoMemoryAllocator1, (void **)&pIMem);
@@ -99,6 +119,46 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
     {
         /* Освобождение интерфейсов в случае ошибки */
         goto Release;
+    }
+
+    /* Проверка поддержки подключений обратного интерфейса */
+    result = pIEcoLab1->pVTbl->QueryInterface(pIEcoLab1, &IID_IEcoConnectionPointContainer, (void **)&pICPC);
+    if (result != 0 || pICPC == 0)
+    {
+        /* Освобождение интерфейсов в случае ошибки */
+        goto Release;
+    }
+
+    /* Запрос на получения интерфейса точки подключения */
+    result = pICPC->pVTbl->FindConnectionPoint(pICPC, &IID_IEcoLab1Events, &pICP);
+    if (result != 0 || pICP == 0)
+    {
+        /* Освобождение интерфейсов в случае ошибки */
+        goto Release;
+    }
+    /* Освобождение интерфейса */
+    pICPC->pVTbl->Release(pICPC);
+
+    /* Создание экземпляра обратного интерфейса */
+    result = createCEcoLab1Sink(pIMem, (IEcoLab1Events **)&pIEcoLab1Sink);
+
+    if (pIEcoLab1Sink != 0)
+    {
+        result = pIEcoLab1Sink->pVTbl->QueryInterface(pIEcoLab1Sink, &IID_IEcoUnknown, (void **)&pISinkUnk);
+        if (result != 0 || pISinkUnk == 0)
+        {
+            /* Освобождение интерфейсов в случае ошибки */
+            goto Release;
+        }
+        /* Подключение */
+        result = pICP->pVTbl->Advise(pICP, pISinkUnk, &cAdvise);
+        /* Проверка */
+        if (result == 0 && cAdvise == 1)
+        {
+            /* Сюда можно добавить код */
+        }
+        /* Освобождение интерфейса */
+        pISinkUnk->pVTbl->Release(pISinkUnk);
     }
 
     // Test & Cmp time for CountSort
@@ -128,6 +188,14 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
 
         pIMem->pVTbl->Free(pIMem, sorted_arr);
         pIMem->pVTbl->Free(pIMem, generated_arr);
+    }
+
+    if (pIEcoLab1Sink != 0)
+    {
+        /* Отключение */
+        result = pICP->pVTbl->Unadvise(pICP, cAdvise);
+        pIEcoLab1Sink->pVTbl->Release(pIEcoLab1Sink);
+        pICP->pVTbl->Release(pICP);
     }
 
 Release:

@@ -1,4 +1,22 @@
 ﻿  CEcoLab1Factory.c
+  CEcoLab1EnumConnections.c
+  CEcoLab1EnumConnectionPoints.c
+  CEcoLab1ConnectionPoint.c
+  CEcoLab1.c
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(309): warning C4047: 'function' : 'IEcoConnectionPoint *' differs in levels of indirection from 'IEcoConnectionPointVTbl **'
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(309): warning C4024: 'createCEcoLab1EnumConnectionPoints' : different types for formal and actual parameter 2
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(348): warning C4047: 'function' : 'IEcoConnectionPoint *' differs in levels of indirection from 'IEcoConnectionPointVTbl **'
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(348): warning C4024: 'function through pointer' : different types for formal and actual parameter 1
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(349): warning C4047: '=' : 'IEcoConnectionPoint *' differs in levels of indirection from 'IEcoConnectionPointVTbl **'
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(372): warning C4018: '<' : signed/unsigned mismatch
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(406): warning C4018: '<' : signed/unsigned mismatch
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(423): warning C4018: '<' : signed/unsigned mismatch
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(428): warning C4018: '<' : signed/unsigned mismatch
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(442): warning C4018: '<' : signed/unsigned mismatch
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(444): warning C4018: '<' : signed/unsigned mismatch
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(500): warning C4047: 'function' : 'IEcoConnectionPointContainer *' differs in levels of indirection from 'IEcoConnectionPointContainerVTbl **'
+c:\users\karku\documents\visual studio 2010\projects\eco.lab1\sourcefiles\cecolab1.c(500): warning C4024: 'createCEcoLab1ConnectionPoint' : different types for formal and actual parameter 2
+  Generating Code...
 C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(990,5): warning MSB8012: TargetPath(C:\Users\karku\Documents\Visual Studio 2010\Projects\Eco.Lab1\AssemblyFiles\Windows\VisualStudio_10\Eco.Lab1\DynamicDebug\1F5DF16EE1BF43B999A434ED38FE8F3A.dll) does not match the Linker's OutputFile property value (C:\Users\karku\Documents\Visual Studio 2010\Projects\Eco.Lab1\BuildFiles\Windows\x86\DynamicDebug\1F5DF16EE1BF43B999A434ED38FE8F3A.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
   LINK : ..\..\..\BuildFiles\Windows\x86\DynamicDebug\1F5DF16EE1BF43B999A434ED38FE8F3A.dll not found or not built by the last incremental link; performing full link
      Creating library C:\Users\karku\Documents\Visual Studio 2010\Projects\Eco.Lab1\AssemblyFiles\Windows\VisualStudio_10\Eco.Lab1\DynamicDebug\1F5DF16EE1BF43B999A434ED38FE8F3A.lib and object C:\Users\karku\Documents\Visual Studio 2010\Projects\Eco.Lab1\AssemblyFiles\Windows\VisualStudio_10\Eco.Lab1\DynamicDebug\1F5DF16EE1BF43B999A434ED38FE8F3A.exp
