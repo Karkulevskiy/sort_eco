@@ -32,21 +32,26 @@ static const UGUID IID_IEcoLab1Events = {0x01, 0x10, 0xB6, 0xD3, 0x86, 0x61, 0x6
 #endif /* __IID_IEcoLab1Events */
 
 /* Обратный интерфейс */
-typedef struct IEcoLab1VTblEvents {
+typedef struct IEcoLab1VTblEvents
+{
 
     /* IEcoUnknown */
-    int16_t (ECOCALLMETHOD *QueryInterface )(/* in */ struct IEcoLab1Events* me, /* in */ const UGUID* riid, /* out */ void **ppv);
-    uint32_t (ECOCALLMETHOD *AddRef )(/* in */ struct IEcoLab1Events* me);
-    uint32_t (ECOCALLMETHOD *Release )(/* in */ struct IEcoLab1Events* me);
+    int16_t(ECOCALLMETHOD *QueryInterface)(/* in */ struct IEcoLab1Events *me, /* in */ const UGUID *riid, /* out */ void **ppv);
+    uint32_t(ECOCALLMETHOD *AddRef)(/* in */ struct IEcoLab1Events *me);
+    uint32_t(ECOCALLMETHOD *Release)(/* in */ struct IEcoLab1Events *me);
 
     /* IEcoLab1Events */
-    int16_t (ECOCALLMETHOD *OnMyCallback)(/* in */ struct IEcoLab1Events* me, /* in */ char_t* Name);
+    int16_t(ECOCALLMETHOD *HipHipHooray)(/* in */ struct IEcoLab1Events *me, /* in */ char_t *Name);
+    int16_t(ECOCALLMETHOD *GetMinMaxInArray)(/* in */ struct IEcoLab1Events *me, int32_t *array, int32_t length, int32_t *min, int32_t *max);
+    int16_t(ECOCALLMETHOD *InitZeros)(/* in */ struct IEcoLab1Events *me, uint32_t *array, uint32_t length);
+    int16_t(ECOCALLMETHOD *LocalCountSort)(/* in */ struct IEcoLab1Events *me, uint32_t *countedArray, int32_t *outputArray, uint32_t range, int32_t min);
 
 } IEcoLab1VTblEvents, *IEcoLab1VTblEventsPtr;
 
-interface IEcoLab1Events {
+interface IEcoLab1Events
+{
     struct IEcoLab1VTblEvents *pVTbl;
-} IEcoLab1Events;
-
+}
+IEcoLab1Events;
 
 #endif /* __I_ECOLAB1EVENTS_H__ */

@@ -19,6 +19,7 @@
 
 #include "CEcoLab1Sink.h"
 #include "IEcoConnectionPointContainer.h"
+#include "stdio.h"
 
 /*
  *
@@ -31,13 +32,16 @@
  * </описание>
  *
  */
-int16_t ECOCALLMETHOD CEcoLab1Sink_QueryInterface(/* in */ struct IEcoLab1Events* me, /* in */ const UGUID* riid, /* out */ void** ppv) {
-    if ( IsEqualUGUID(riid, &IID_IEcoLab1Events ) ) {
+int16_t ECOCALLMETHOD CEcoLab1Sink_QueryInterface(/* in */ struct IEcoLab1Events *me, /* in */ const UGUID *riid, /* out */ void **ppv)
+{
+    if (IsEqualUGUID(riid, &IID_IEcoLab1Events))
+    {
         *ppv = me;
         me->pVTbl->AddRef(me);
         return 0;
     }
-    else if ( IsEqualUGUID(riid, &IID_IEcoUnknown ) ) {
+    else if (IsEqualUGUID(riid, &IID_IEcoUnknown))
+    {
         *ppv = me;
         me->pVTbl->AddRef(me);
         return 0;
@@ -59,10 +63,12 @@ int16_t ECOCALLMETHOD CEcoLab1Sink_QueryInterface(/* in */ struct IEcoLab1Events
  * </описание>
  *
  */
-uint32_t ECOCALLMETHOD CEcoLab1Sink_AddRef(/* in */ struct IEcoLab1Events* me) {
-    CEcoLab1Sink* pCMe = (CEcoLab1Sink*)me;
+uint32_t ECOCALLMETHOD CEcoLab1Sink_AddRef(/* in */ struct IEcoLab1Events *me)
+{
+    CEcoLab1Sink *pCMe = (CEcoLab1Sink *)me;
 
-    if (me == 0 ) {
+    if (me == 0)
+    {
         return -1;
     }
 
@@ -81,10 +87,12 @@ uint32_t ECOCALLMETHOD CEcoLab1Sink_AddRef(/* in */ struct IEcoLab1Events* me) {
  * </описание>
  *
  */
-uint32_t ECOCALLMETHOD CEcoLab1Sink_Release(/* in */ struct IEcoLab1Events* me) {
-    CEcoLab1Sink* pCMe = (CEcoLab1Sink*)me;
+uint32_t ECOCALLMETHOD CEcoLab1Sink_Release(/* in */ struct IEcoLab1Events *me)
+{
+    CEcoLab1Sink *pCMe = (CEcoLab1Sink *)me;
 
-    if (me == 0 ) {
+    if (me == 0)
+    {
         return -1;
     }
 
@@ -92,8 +100,9 @@ uint32_t ECOCALLMETHOD CEcoLab1Sink_Release(/* in */ struct IEcoLab1Events* me) 
     --pCMe->m_cRef;
 
     /* В случае обнуления счетчика, освобождение данных экземпляра */
-    if ( pCMe->m_cRef == 0 ) {
-        deleteCEcoLab1Sink((IEcoLab1Events*)pCMe);
+    if (pCMe->m_cRef == 0)
+    {
+        deleteCEcoLab1Sink((IEcoLab1Events *)pCMe);
         return 0;
     }
     return pCMe->m_cRef;
@@ -102,7 +111,7 @@ uint32_t ECOCALLMETHOD CEcoLab1Sink_Release(/* in */ struct IEcoLab1Events* me) 
 /*
  *
  * <сводка>
- *   Функция OnMyCallback
+ *   Функция HipHipHooray
  * </сводка>
  *
  * <описание>
@@ -110,18 +119,82 @@ uint32_t ECOCALLMETHOD CEcoLab1Sink_Release(/* in */ struct IEcoLab1Events* me) 
  * </описание>
  *
  */
-int16_t ECOCALLMETHOD CEcoLab1Sink_OnMyCallback(/* in */ struct IEcoLab1Events* me, /* in */ char_t* Name) {
-    CEcoLab1Sink* pCMe = (CEcoLab1Sink*)me;
+int16_t ECOCALLMETHOD CEcoLab1Sink_HipHipHooray(/* in */ struct IEcoLab1Events *me, /* in */ char_t *Name)
+{
+    CEcoLab1Sink *pCMe = (CEcoLab1Sink *)me;
 
-    if (me == 0 ) {
+    if (me == 0)
+    {
         return -1;
     }
 
+    printf("DONE!!!! Hip, Hip, Hurra!!! from %s\n", Name);
 
     return 0;
 }
 
+int16_t ECOCALLMETHOD CEcoLab1Sink_GetMinMaxInArray(/* in */ struct IEcoLab1Events *me, int32_t *array, int32_t length, int32_t *min, int32_t *max)
+{
+    int32_t i;
+    CEcoLab1Sink *pCMe = (CEcoLab1Sink *)me;
 
+    if (me == 0)
+    {
+        return -1;
+    }
+    *min = array[0];
+    *max = array[0];
+    for (i = 1; i < length; i++)
+    {
+        if (array[i] < *min)
+            *min = array[i];
+        if (array[i] > *max)
+            *max = array[i];
+    }
+    return 0;
+}
+
+int16_t ECOCALLMETHOD CEcoLab1Sink_InitZeros(/* in */ struct IEcoLab1Events *me, uint32_t *array, uint32_t length)
+{
+    uint32_t i;
+    CEcoLab1Sink *pCMe = (CEcoLab1Sink *)me;
+
+    if (me == 0)
+    {
+        return -1;
+    }
+
+    for (i = 0; i < length; ++i)
+    {
+        array[i] = 0;
+    }
+
+    return 0;
+}
+
+int16_t ECOCALLMETHOD CEcoLab1Sink_LocalCountSort(/* in */ struct IEcoLab1Events *me, uint32_t *countedArray, int32_t *outputArray, uint32_t range, int32_t min)
+{
+    int32_t i;
+    int32_t j;
+    uint32_t outputIndex;
+    CEcoLab1Sink *pCMe = (CEcoLab1Sink *)me;
+
+    if (me == 0)
+    {
+        return -1;
+    }
+
+    outputIndex = 0;
+    for (i = 0; i < range; i++)
+    {
+        for (j = 0; j < countedArray[i]; j++)
+        {
+            outputArray[outputIndex++] = i + min;
+        }
+    }
+
+    return 0;
+}
 /*
  *
  * <сводка>
@@ -133,20 +206,23 @@ int16_t ECOCALLMETHOD CEcoLab1Sink_OnMyCallback(/* in */ struct IEcoLab1Events* 
  * </описание>
  *
  */
-int16_t ECOCALLMETHOD CEcoLab1Sink_Advise(/* in */ struct CEcoLab1Sink* me, /* in */IEcoLab1 *pIEcoLab1) {
-    IEcoConnectionPointContainer* pCPC = 0;
-    IEcoConnectionPoint* pCP = 0;
+int16_t ECOCALLMETHOD CEcoLab1Sink_Advise(/* in */ struct CEcoLab1Sink *me, /* in */ IEcoLab1 *pIEcoLab1)
+{
+    IEcoConnectionPointContainer *pCPC = 0;
+    IEcoConnectionPoint *pCP = 0;
     int16_t result = 0;
 
-    result = pIEcoLab1->pVTbl->QueryInterface(pIEcoLab1, &IID_IEcoConnectionPointContainer, (void**)&pCPC);
+    result = pIEcoLab1->pVTbl->QueryInterface(pIEcoLab1, &IID_IEcoConnectionPointContainer, (void **)&pCPC);
 
-    if (result == 0 && pCPC != 0) {
+    if (result == 0 && pCPC != 0)
+    {
         result = pCPC->pVTbl->FindConnectionPoint(pCPC, &IID_IEcoLab1Events, &pCP);
         pCPC->pVTbl->Release(pCPC);
         pCPC = 0;
-        if (result == 0 && pCP != 0) {
+        if (result == 0 && pCP != 0)
+        {
 
-            result = pCP->pVTbl->Advise(pCP, (IEcoUnknown*)me, &me->m_cCookie);
+            result = pCP->pVTbl->Advise(pCP, (IEcoUnknown *)me, &me->m_cCookie);
             pCP->pVTbl->Release(pCP);
             pCP = 0;
         }
@@ -166,18 +242,22 @@ int16_t ECOCALLMETHOD CEcoLab1Sink_Advise(/* in */ struct CEcoLab1Sink* me, /* i
  * </описание>
  *
  */
-int16_t ECOCALLMETHOD CEcoLab1Sink_Unadvise(/* in */ struct CEcoLab1Sink* me, /* in */IEcoLab1 *pIEcoLab1) {
-    IEcoConnectionPointContainer* pCPC = 0;
-    IEcoConnectionPoint * pCP = 0;
+int16_t ECOCALLMETHOD CEcoLab1Sink_Unadvise(/* in */ struct CEcoLab1Sink *me, /* in */ IEcoLab1 *pIEcoLab1)
+{
+    IEcoConnectionPointContainer *pCPC = 0;
+    IEcoConnectionPoint *pCP = 0;
     int16_t result = 0;
 
-    if (me->m_cCookie) {
-        result = pIEcoLab1->pVTbl->QueryInterface(pIEcoLab1, &IID_IEcoConnectionPointContainer, (void**)&pCPC);
-        if (result == 0) {
+    if (me->m_cCookie)
+    {
+        result = pIEcoLab1->pVTbl->QueryInterface(pIEcoLab1, &IID_IEcoConnectionPointContainer, (void **)&pCPC);
+        if (result == 0)
+        {
             result = pCPC->pVTbl->FindConnectionPoint(pCPC, &IID_IEcoLab1Events, &pCP);
             pCPC->pVTbl->Release(pCPC);
             pCPC = 0;
-            if (result == 0) {
+            if (result == 0)
+            {
                 result = pCP->pVTbl->Unadvise(pCP, me->m_cCookie);
                 pCP->pVTbl->Release(pCP);
                 pCP = 0;
@@ -192,7 +272,10 @@ IEcoLab1VTblEvents g_x2D2E3B9214F248A6A09ECB494B59C795VTblEvents = {
     CEcoLab1Sink_QueryInterface,
     CEcoLab1Sink_AddRef,
     CEcoLab1Sink_Release,
-    CEcoLab1Sink_OnMyCallback
+    CEcoLab1Sink_HipHipHooray,
+    CEcoLab1Sink_GetMinMaxInArray,
+    CEcoLab1Sink_InitZeros,
+    CEcoLab1Sink_LocalCountSort,
 };
 
 /*
@@ -206,17 +289,19 @@ IEcoLab1VTblEvents g_x2D2E3B9214F248A6A09ECB494B59C795VTblEvents = {
  * </описание>
  *
  */
-int16_t ECOCALLMETHOD createCEcoLab1Sink(/* in */ IEcoMemoryAllocator1* pIMem, /* out */ IEcoLab1Events** ppIEcoLab1Events) {
+int16_t ECOCALLMETHOD createCEcoLab1Sink(/* in */ IEcoMemoryAllocator1 *pIMem, /* out */ IEcoLab1Events **ppIEcoLab1Events)
+{
     int16_t result = -1;
-    CEcoLab1Sink* pCMe = 0;
+    CEcoLab1Sink *pCMe = 0;
 
     /* Проверка указателей */
-    if (ppIEcoLab1Events == 0 || pIMem == 0 ) {
+    if (ppIEcoLab1Events == 0 || pIMem == 0)
+    {
         return result;
     }
 
     /* Выделение памяти для данных экземпляра */
-    pCMe = (CEcoLab1Sink*)pIMem->pVTbl->Alloc(pIMem, sizeof(CEcoLab1Sink));
+    pCMe = (CEcoLab1Sink *)pIMem->pVTbl->Alloc(pIMem, sizeof(CEcoLab1Sink));
 
     /* Сохранение указателя на интерфейс для работы с памятью */
     pCMe->m_pIMem = pIMem;
@@ -228,7 +313,7 @@ int16_t ECOCALLMETHOD createCEcoLab1Sink(/* in */ IEcoMemoryAllocator1* pIMem, /
     /* Создание таблицы функций интерфейса IEcoP2PEvents */
     pCMe->m_pVTblIEcoLab1Events = &g_x2D2E3B9214F248A6A09ECB494B59C795VTblEvents;
 
-    *ppIEcoLab1Events = (IEcoLab1Events*)pCMe;
+    *ppIEcoLab1Events = (IEcoLab1Events *)pCMe;
 
     return 0;
 };
@@ -244,11 +329,13 @@ int16_t ECOCALLMETHOD createCEcoLab1Sink(/* in */ IEcoMemoryAllocator1* pIMem, /
  * </описание>
  *
  */
-void ECOCALLMETHOD deleteCEcoLab1Sink(IEcoLab1Events* pIEcoLab1Events) {
-    CEcoLab1Sink* pCMe = (CEcoLab1Sink*)pIEcoLab1Events;
-    IEcoMemoryAllocator1* pIMem = 0;
+void ECOCALLMETHOD deleteCEcoLab1Sink(IEcoLab1Events *pIEcoLab1Events)
+{
+    CEcoLab1Sink *pCMe = (CEcoLab1Sink *)pIEcoLab1Events;
+    IEcoMemoryAllocator1 *pIMem = 0;
 
-    if (pIEcoLab1Events != 0 ) {
+    if (pIEcoLab1Events != 0)
+    {
         pIMem = pCMe->m_pIMem;
         /* Освобождение */
         pIMem->pVTbl->Free(pIMem, pCMe);

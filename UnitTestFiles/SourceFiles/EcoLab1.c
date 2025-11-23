@@ -25,7 +25,7 @@
 #include "IdEcoLab1.h"
 #include <time.h>
 
-// "#include "IdEcoList1.h"
+#include "IdEcoList1.h"
 #include "CEcoLab1Sink.h"
 #include "IEcoConnectionPointContainer.h"
 
@@ -94,13 +94,13 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
         /* Освобождение в случае ошибки */
         goto Release;
     }
-    // /* Регистрация статического компонента для работы со списком */
-    // result = pIBus->pVTbl->RegisterComponent(pIBus, &CID_EcoList1, (IEcoUnknown *)GetIEcoComponentFactoryPtr_53884AFC93C448ECAA929C8D3A562281);
-    // if (result != 0)
-    // {
-    //     /* Освобождение в случае ошибки */
-    //     goto Release;
-    // }
+    /* Регистрация статического компонента для работы со списком */
+    result = pIBus->pVTbl->RegisterComponent(pIBus, &CID_EcoList1, (IEcoUnknown *)GetIEcoComponentFactoryPtr_53884AFC93C448ECAA929C8D3A562281);
+    if (result != 0)
+    {
+        /* Освобождение в случае ошибки */
+        goto Release;
+    }
 
 #endif
     /* Получение интерфейса управления памятью */

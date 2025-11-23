@@ -141,7 +141,7 @@ static uint32_t ECOCALLMETHOD CEcoLab1_Release(/* in */ IEcoLab1Ptr_t me)
 /*
  *
  * <сводка>
- *   Функция Fire_OnMyCallback
+ *   Функция Fire_HipHipHooray
  * </сводка>
  *
  * <описание>
@@ -149,7 +149,7 @@ static uint32_t ECOCALLMETHOD CEcoLab1_Release(/* in */ IEcoLab1Ptr_t me)
  * </описание>
  *
  */
-int16_t ECOCALLMETHOD CEcoLab1_Fire_OnMyCallback(/* in */ struct IEcoLab1 *me, /* in */ char_t *Name)
+int16_t ECOCALLMETHOD CEcoLab1_Fire_HipHipHooray(/* in */ struct IEcoLab1 *me, /* in */ char_t *Name)
 {
     CEcoLab1 *pCMe = (CEcoLab1 *)me;
     int16_t result = 0;
@@ -174,7 +174,115 @@ int16_t ECOCALLMETHOD CEcoLab1_Fire_OnMyCallback(/* in */ struct IEcoLab1 *me, /
                 result = cd.pUnk->pVTbl->QueryInterface(cd.pUnk, &IID_IEcoLab1Events, (void **)&pIEvents);
                 if ((result == 0) && (pIEvents != 0))
                 {
-                    result = pIEvents->pVTbl->OnMyCallback(pIEvents, Name);
+                    result = pIEvents->pVTbl->HipHipHooray(pIEvents, Name);
+                    pIEvents->pVTbl->Release(pIEvents);
+                }
+                cd.pUnk->pVTbl->Release(cd.pUnk);
+            }
+            pEnum->pVTbl->Release(pEnum);
+        }
+    }
+    return result;
+}
+
+int16_t ECOCALLMETHOD CEcoLab1_Fire_GetMinMaxInArray(/* in */ struct IEcoLab1 *me, int32_t *array, int32_t length, int32_t *min, int32_t *max)
+{
+    CEcoLab1 *pCMe = (CEcoLab1 *)me;
+    int16_t result = 0;
+    uint32_t count = 0;
+    uint32_t index = 0;
+    IEcoEnumConnections *pEnum = 0;
+    IEcoLab1Events *pIEvents = 0;
+    EcoConnectionData cd;
+
+    if (me == 0)
+    {
+        return -1;
+    }
+
+    if (pCMe->m_pISinkCP != 0)
+    {
+        result = ((IEcoConnectionPoint *)pCMe->m_pISinkCP)->pVTbl->EnumConnections((IEcoConnectionPoint *)pCMe->m_pISinkCP, &pEnum);
+        if ((result == 0) && (pEnum != 0))
+        {
+            while (pEnum->pVTbl->Next(pEnum, 1, &cd, 0) == 0)
+            {
+                result = cd.pUnk->pVTbl->QueryInterface(cd.pUnk, &IID_IEcoLab1Events, (void **)&pIEvents);
+                if ((result == 0) && (pIEvents != 0))
+                {
+                    result = pIEvents->pVTbl->GetMinMaxInArray(pIEvents, array, length, min, max);
+                    pIEvents->pVTbl->Release(pIEvents);
+                }
+                cd.pUnk->pVTbl->Release(cd.pUnk);
+            }
+            pEnum->pVTbl->Release(pEnum);
+        }
+    }
+    return result;
+}
+
+int16_t ECOCALLMETHOD CEcoLab1_Fire_InitZeros(/* in */ struct IEcoLab1 *me, uint32_t *array, uint32_t length)
+{
+    CEcoLab1 *pCMe = (CEcoLab1 *)me;
+    int16_t result = 0;
+    uint32_t count = 0;
+    uint32_t index = 0;
+    IEcoEnumConnections *pEnum = 0;
+    IEcoLab1Events *pIEvents = 0;
+    EcoConnectionData cd;
+
+    if (me == 0)
+    {
+        return -1;
+    }
+
+    if (pCMe->m_pISinkCP != 0)
+    {
+        result = ((IEcoConnectionPoint *)pCMe->m_pISinkCP)->pVTbl->EnumConnections((IEcoConnectionPoint *)pCMe->m_pISinkCP, &pEnum);
+        if ((result == 0) && (pEnum != 0))
+        {
+            while (pEnum->pVTbl->Next(pEnum, 1, &cd, 0) == 0)
+            {
+                result = cd.pUnk->pVTbl->QueryInterface(cd.pUnk, &IID_IEcoLab1Events, (void **)&pIEvents);
+                if ((result == 0) && (pIEvents != 0))
+                {
+                    result = pIEvents->pVTbl->InitZeros(pIEvents, array, length);
+                    pIEvents->pVTbl->Release(pIEvents);
+                }
+                cd.pUnk->pVTbl->Release(cd.pUnk);
+            }
+            pEnum->pVTbl->Release(pEnum);
+        }
+    }
+    return result;
+}
+
+int16_t ECOCALLMETHOD CEcoLab1_Fire_LocalCountSort(/* in */ struct IEcoLab1 *me, uint32_t *countedArray, int32_t *outputArray, uint32_t range, int32_t min)
+{
+    CEcoLab1 *pCMe = (CEcoLab1 *)me;
+    int16_t result = 0;
+    uint32_t count = 0;
+    uint32_t index = 0;
+    IEcoEnumConnections *pEnum = 0;
+    IEcoLab1Events *pIEvents = 0;
+    EcoConnectionData cd;
+
+    if (me == 0)
+    {
+        return -1;
+    }
+
+    if (pCMe->m_pISinkCP != 0)
+    {
+        result = ((IEcoConnectionPoint *)pCMe->m_pISinkCP)->pVTbl->EnumConnections((IEcoConnectionPoint *)pCMe->m_pISinkCP, &pEnum);
+        if ((result == 0) && (pEnum != 0))
+        {
+            while (pEnum->pVTbl->Next(pEnum, 1, &cd, 0) == 0)
+            {
+                result = cd.pUnk->pVTbl->QueryInterface(cd.pUnk, &IID_IEcoLab1Events, (void **)&pIEvents);
+                if ((result == 0) && (pIEvents != 0))
+                {
+                    result = pIEvents->pVTbl->LocalCountSort(pIEvents, countedArray, outputArray, range, min);
                     pIEvents->pVTbl->Release(pIEvents);
                 }
                 cd.pUnk->pVTbl->Release(cd.pUnk);
@@ -380,7 +488,7 @@ static int16_t ECOCALLMETHOD CEcoLab1_PseudoGenerator(
 }
 
 static int16_t ECOCALLMETHOD CEcoLab1_CountSort(
-    /* in */ IEcoLab1Ptr_t me,
+    /* in */ IEcoLab1 *me,
     /* in */ int32_t *inputArray,
     /* in */ uint32_t length,
     /* out */ int32_t **sortedArray)
@@ -400,16 +508,7 @@ static int16_t ECOCALLMETHOD CEcoLab1_CountSort(
         return ERR_ECO_POINTER;
     }
 
-    // Находим мин и макс
-    min = inputArray[0];
-    max = inputArray[0];
-    for (i = 1; i < length; i++)
-    {
-        if (inputArray[i] < min)
-            min = inputArray[i];
-        if (inputArray[i] > max)
-            max = inputArray[i];
-    }
+    CEcoLab1_Fire_GetMinMaxInArray(me, inputArray, length, &min, &max);
 
     range = max - min + 1;
 
@@ -419,11 +518,9 @@ static int16_t ECOCALLMETHOD CEcoLab1_CountSort(
     {
         return ERR_ECO_OUTOFMEMORY;
     }
-    // Инициализировать нулями
-    for (i = 0; i < range; ++i)
-    {
-        countedArray[i] = 0;
-    }
+
+    CEcoLab1_Fire_InitZeros(me, countedArray, range);
+
     // Считаем кол-во элементов
     for (i = 0; i < length; i++)
     {
@@ -438,14 +535,7 @@ static int16_t ECOCALLMETHOD CEcoLab1_CountSort(
     }
 
     // Заполняем результирующий массив
-    outputIndex = 0;
-    for (i = 0; i < range; i++)
-    {
-        for (j = 0; j < countedArray[i]; j++)
-        {
-            outputArray[outputIndex++] = i + min;
-        }
-    }
+    CEcoLab1_Fire_LocalCountSort(me, countedArray, outputArray, range, min);
 
     // Чистим память от массива подсчётов
     pCMe->m_pIMem->pVTbl->Free(pCMe->m_pIMem, countedArray);
@@ -453,7 +543,7 @@ static int16_t ECOCALLMETHOD CEcoLab1_CountSort(
     *sortedArray = outputArray;
 
     /* Обратный вызов */
-    CEcoLab1_Fire_OnMyCallback(me, pCMe->m_Name);
+    CEcoLab1_Fire_HipHipHooray(me, pCMe->m_Name);
 
     return ERR_ECO_SUCCESES;
 }
