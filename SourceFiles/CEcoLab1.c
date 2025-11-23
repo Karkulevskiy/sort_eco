@@ -24,6 +24,7 @@
 #include "CEcoLab1EnumConnectionPoints.h"
 #include "IEcoConnectionPointContainer.h"
 #include "IEcoLab1Events.h"
+#include "IEcoLab2Events.h"
 /*
  *
  * <сводка>
@@ -293,6 +294,78 @@ int16_t ECOCALLMETHOD CEcoLab1_Fire_LocalCountSort(/* in */ struct IEcoLab1 *me,
     return result;
 }
 
+int16_t ECOCALLMETHOD CEcoLab2_Fire_Greeting(/* in */ struct IEcoLab1 *me)
+{
+    CEcoLab1 *pCMe = (CEcoLab1 *)me;
+    int16_t result = 0;
+    uint32_t count = 0;
+    uint32_t index = 0;
+    IEcoEnumConnections *pEnum = 0;
+    IEcoLab2Events *pIEvents = 0;
+    EcoConnectionData cd;
+
+    if (me == 0)
+    {
+        return -1;
+    }
+
+    if (pCMe->m_pISinkCP != 0)
+    {
+        result = ((IEcoConnectionPoint *)pCMe->m_pISinkCP)->pVTbl->EnumConnections((IEcoConnectionPoint *)pCMe->m_pISinkCP, &pEnum);
+        if ((result == 0) && (pEnum != 0))
+        {
+            while (pEnum->pVTbl->Next(pEnum, 1, &cd, 0) == 0)
+            {
+                result = cd.pUnk->pVTbl->QueryInterface(cd.pUnk, &IID_IEcoLab2Events, (void **)&pIEvents);
+                if ((result == 0) && (pIEvents != 0))
+                {
+                    result = pIEvents->pVTbl->Greeting(pIEvents);
+                    pIEvents->pVTbl->Release(pIEvents);
+                }
+                cd.pUnk->pVTbl->Release(cd.pUnk);
+            }
+            pEnum->pVTbl->Release(pEnum);
+        }
+    }
+    return result;
+}
+
+int16_t ECOCALLMETHOD CEcoLab2_Fire_CountElements(/* in */ struct IEcoLab1 *me, uint32_t *countedArray, int32_t *inputArray, uint32_t length, int32_t min)
+{
+    CEcoLab1 *pCMe = (CEcoLab1 *)me;
+    int16_t result = 0;
+    uint32_t count = 0;
+    uint32_t index = 0;
+    IEcoEnumConnections *pEnum = 0;
+    IEcoLab2Events *pIEvents = 0;
+    EcoConnectionData cd;
+
+    if (me == 0)
+    {
+        return -1;
+    }
+
+    if (pCMe->m_pISinkCP != 0)
+    {
+        result = ((IEcoConnectionPoint *)pCMe->m_pISinkCP)->pVTbl->EnumConnections((IEcoConnectionPoint *)pCMe->m_pISinkCP, &pEnum);
+        if ((result == 0) && (pEnum != 0))
+        {
+            while (pEnum->pVTbl->Next(pEnum, 1, &cd, 0) == 0)
+            {
+                result = cd.pUnk->pVTbl->QueryInterface(cd.pUnk, &IID_IEcoLab2Events, (void **)&pIEvents);
+                if ((result == 0) && (pIEvents != 0))
+                {
+                    result = pIEvents->pVTbl->CountElements(pIEvents, countedArray, inputArray, length, min);
+                    pIEvents->pVTbl->Release(pIEvents);
+                }
+                cd.pUnk->pVTbl->Release(cd.pUnk);
+            }
+            pEnum->pVTbl->Release(pEnum);
+        }
+    }
+    return result;
+}
+
 /*
  *
  * <сводка>
@@ -440,7 +513,7 @@ int16_t ECOCALLMETHOD CEcoLab1_IEcoConnectionPointContainer_FindConnectionPoint(
         return -1;
     }
 
-    if (!IsEqualUGUID(riid, &IID_IEcoLab1Events))
+    if (!IsEqualUGUID(riid, &IID_IEcoLab1Events) && !IsEqualUGUID(riid, &IID_IEcoLab2Events))
     {
         *ppCP = 0;
         /* CONNECT_E_NOCONNECTION */
@@ -508,6 +581,8 @@ static int16_t ECOCALLMETHOD CEcoLab1_CountSort(
         return ERR_ECO_POINTER;
     }
 
+    CEcoLab2_Fire_Greeting(me);
+
     CEcoLab1_Fire_GetMinMaxInArray(me, inputArray, length, &min, &max);
 
     range = max - min + 1;
@@ -522,10 +597,8 @@ static int16_t ECOCALLMETHOD CEcoLab1_CountSort(
     CEcoLab1_Fire_InitZeros(me, countedArray, range);
 
     // Считаем кол-во элементов
-    for (i = 0; i < length; i++)
-    {
-        countedArray[inputArray[i] - min]++;
-    }
+    CEcoLab2_Fire_CountElements(me, countedArray, inputArray, length, min);
+
     // Создать результирующий массив
     outputArray = (int32_t *)pCMe->m_pIMem->pVTbl->Alloc(pCMe->m_pIMem, length * sizeof(int32_t));
     if (outputArray == 0)
@@ -542,7 +615,6 @@ static int16_t ECOCALLMETHOD CEcoLab1_CountSort(
 
     *sortedArray = outputArray;
 
-    /* Обратный вызов */
     CEcoLab1_Fire_HipHipHooray(me, pCMe->m_Name);
 
     return ERR_ECO_SUCCESES;
@@ -587,7 +659,7 @@ int16_t ECOCALLMETHOD initCEcoLab1(/*in*/ IEcoLab1Ptr_t me, /* in */ struct IEco
     pCMe->m_pISys = (IEcoSystem1 *)pIUnkSystem;
 
     /* Создание точки подключения */
-    result = createCEcoLab1ConnectionPoint((IEcoUnknown *)pCMe->m_pISys, &pCMe->m_pVTblICPC, &IID_IEcoLab1Events, (IEcoConnectionPoint **)&((pCMe)->m_pISinkCP));
+    result = createCEcoLab1ConnectionPoint((IEcoUnknown *)pCMe->m_pISys, &pCMe->m_pVTblICPC, &IID_IEcoLab1Events, &IID_IEcoLab2Events, (IEcoConnectionPoint **)&((pCMe)->m_pISinkCP));
     if (result == 0 && pCMe->m_pISinkCP != 0)
     {
         result = 0;

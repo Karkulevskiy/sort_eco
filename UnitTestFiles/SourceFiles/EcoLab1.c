@@ -27,6 +27,7 @@
 
 #include "IdEcoList1.h"
 #include "CEcoLab1Sink.h"
+#include "CEcoLab2Sink.h"
 #include "IEcoConnectionPointContainer.h"
 
 /*
@@ -65,6 +66,7 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
     IEcoConnectionPoint *pICP = 0;
     /* Указатель на обратный интерфейс */
     IEcoLab1Events *pIEcoLab1Sink = 0;
+    IEcoLab1Events *pIEcoLab2Sink = 0;
     IEcoUnknown *pISinkUnk = 0;
     uint32_t cAdvise = 0;
 
@@ -141,7 +143,6 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
 
     /* Создание экземпляра обратного интерфейса */
     result = createCEcoLab1Sink(pIMem, (IEcoLab1Events **)&pIEcoLab1Sink);
-
     if (pIEcoLab1Sink != 0)
     {
         result = pIEcoLab1Sink->pVTbl->QueryInterface(pIEcoLab1Sink, &IID_IEcoUnknown, (void **)&pISinkUnk);
@@ -161,6 +162,35 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
         pISinkUnk->pVTbl->Release(pISinkUnk);
     }
 
+	/* Запрос на получения интерфейса точки подключения */
+    result = pICPC->pVTbl->FindConnectionPoint(pICPC, &IID_IEcoLab2Events, &pICP);
+    if (result != 0 || pICP == 0)
+    {
+        /* Освобождение интерфейсов в случае ошибки */
+        goto Release;
+    }
+    /* Освобождение интерфейса */
+    pICPC->pVTbl->Release(pICPC);
+
+    result = createCEcoLab2Sink(pIMem, (IEcoLab2Events **)&pIEcoLab2Sink);
+    if (pIEcoLab2Sink != 0)
+    {
+        result = pIEcoLab2Sink->pVTbl->QueryInterface(pIEcoLab2Sink, &IID_IEcoUnknown, (void **)&pISinkUnk);
+        if (result != 0 || pISinkUnk == 0)
+        {
+            /* Освобождение интерфейсов в случае ошибки */
+            goto Release;
+        }
+        /* Подключение */
+        result = pICP->pVTbl->Advise(pICP, pISinkUnk, &cAdvise);
+        /* Проверка */
+        if (result == 0 && cAdvise == 1)
+        {
+            /* Сюда можно добавить код */
+        }
+        /* Освобождение интерфейса */
+        pISinkUnk->pVTbl->Release(pISinkUnk);
+    }
     // Test & Cmp time for CountSort
     for (i = 1; i <= 10; i++)
     {

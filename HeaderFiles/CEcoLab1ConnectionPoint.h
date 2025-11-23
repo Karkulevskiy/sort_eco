@@ -26,34 +26,36 @@
 #include "IEcoSystem1.h"
 #include "IdEcoMemoryManager1.h"
 
-typedef struct CEcoLab1ConnectionPoint {
+typedef struct CEcoLab1ConnectionPoint
+{
 
     /* Таблица функций интерфейса IEcoConnectionPoint */
-    IEcoConnectionPointVTbl* m_pVTblICP;
+    IEcoConnectionPointVTbl *m_pVTblICP;
 
     /* Интерфейс контейнера точки подключения */
-    IEcoConnectionPointContainer* m_pICPC;
+    IEcoConnectionPointContainer *m_pICPC;
 
     /* Идентификатор точки подключения */
-    UGUID* m_piid;
+    UGUID *m_piid;
+    UGUID *m_piid2;
 
     /* Cookie */
     uint32_t m_cNextCookie;
 
     /* Список подключений */
-    IEcoList1* m_pSinkList;
+    IEcoList1 *m_pSinkList;
 
     /* Интерфейс для работы с памятью */
-    IEcoMemoryAllocator1* m_pIMem;
+    IEcoMemoryAllocator1 *m_pIMem;
 
     /* Системный интерфейс */
-    IEcoSystem1* m_pISys;
+    IEcoSystem1 *m_pISys;
 
 } CEcoLab1ConnectionPoint;
 
 /* Создание экземпляра */
-int16_t ECOCALLMETHOD createCEcoLab1ConnectionPoint(/* in */ IEcoUnknown* pIUnkSystem, /* in */ IEcoConnectionPointContainer* pICPC, /* in */ const UGUID* riid, /* out */ IEcoConnectionPoint** ppICP);
+int16_t ECOCALLMETHOD createCEcoLab1ConnectionPoint(/* in */ IEcoUnknown *pIUnkSystem, /* in */ IEcoConnectionPointContainer *pICPC, /* in */ const UGUID *riid, const UGUID *riid2, /* out */ IEcoConnectionPoint **ppICP);
 /* Удаление */
-void ECOCALLMETHOD deleteCEcoLab1ConnectionPoint(/* in */ IEcoConnectionPoint* pICP);
+void ECOCALLMETHOD deleteCEcoLab1ConnectionPoint(/* in */ IEcoConnectionPoint *pICP);
 
 #endif /* __C_ECOLAB1_CONNECTION_POINT_H__ */

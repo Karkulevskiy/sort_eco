@@ -179,6 +179,7 @@
     <ClInclude Include="..\..\..\SharedFiles\IEcoEnumConnections.h" />
     <ClInclude Include="..\..\..\SharedFiles\IEcoLab1.h" />
     <ClInclude Include="..\..\..\SharedFiles\IEcoLab1Events.h" />
+    <ClInclude Include="..\..\..\SharedFiles\IEcoLab2Events.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\SourceFiles\CEcoLab1.c" />

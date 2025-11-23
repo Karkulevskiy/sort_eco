@@ -59,6 +59,9 @@
     <ClInclude Include="..\..\..\SharedFiles\IEcoLab1Events.h">
       <Filter>Shared Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\SharedFiles\IEcoLab2Events.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\SourceFiles\CEcoLab1.c">

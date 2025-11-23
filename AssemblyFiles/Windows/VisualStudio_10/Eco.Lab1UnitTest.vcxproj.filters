@@ -29,9 +29,15 @@
     <ClCompile Include="..\..\..\UnitTestFiles\SourceFiles\CEcoLab1Sink.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\UnitTestFiles\SourceFiles\CEcoLab2Sink.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\UnitTestFiles\HeaderFiles\CEcoLab1Sink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\UnitTestFiles\HeaderFiles\CEcoLab2Sink.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

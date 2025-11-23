@@ -17,23 +17,23 @@
  *
  */
 
-#ifndef __C_ECOLAB1_SINK_H__
-#define __C_ECOLAB1_SINK_H__
+#ifndef __C_ECOLAB2_SINK_H__
+#define __C_ECOLAB2_SINK_H__
 
 #include "IEcoLab1.h"
-#include "IEcoLab1Events.h"
+#include "IEcoLab2Events.h"
 #include "IEcoSystem1.h"
 #include "IdEcoMemoryManager1.h"
 
-typedef struct CEcoLab1Sink
+typedef struct CEcoLab2Sink
 {
 
     /* Таблица функций интерфейса IEcoLab1Events */
-    IEcoLab1VTblEvents *m_pVTblIEcoLab1Events;
+    IEcoLab2VTblEvents *m_pVTblIEcoLab2Events;
 
     /* Вспомогательные функции */
-    int16_t(ECOCALLMETHOD *Advise)(/* in */ struct CEcoLab1Sink *me, /* in */ IEcoLab1 *pIEcoLab1);
-    int16_t(ECOCALLMETHOD *Unadvise)(/* in */ struct CEcoLab1Sink *me, /* in */ IEcoLab1 *pIEcoLab1);
+    int16_t(ECOCALLMETHOD *Advise)(/* in */ struct CEcoLab2Sink *me, /* in */ IEcoLab1 *pIEcoLab1);
+    int16_t(ECOCALLMETHOD *Unadvise)(/* in */ struct CEcoLab2Sink *me, /* in */ IEcoLab1 *pIEcoLab1);
 
     /* Счетчик ссылок */
     uint32_t m_cRef;
@@ -42,11 +42,11 @@ typedef struct CEcoLab1Sink
     /* Интерфейс для работы с памятью */
     IEcoMemoryAllocator1 *m_pIMem;
 
-} CEcoLab1Sink, *CEcoLab1SinkPtr;
+} CEcoLab2Sink, *CEcoLab2SinkPtr;
 
 /* Создание экземпляра */
-int16_t ECOCALLMETHOD createCEcoLab1Sink(/* in */ IEcoMemoryAllocator1 *pIMem, /* out */ IEcoLab1Events **ppIEcoLab1Events);
+int16_t ECOCALLMETHOD createCEcoLab2Sink(/* in */ IEcoMemoryAllocator1 *pIMem, /* out */ IEcoLab2Events **ppIEcoLab2Events);
 /* Удаление */
-void ECOCALLMETHOD deleteCEcoLab1Sink(/* in */ IEcoLab1Events *pIEcoLab1Events);
+void ECOCALLMETHOD deleteCEcoLab2Sink(/* in */ IEcoLab2Events *pIEcoLab2Events);
 
-#endif /* __C_ECOLAB1_SINK_H__ */
+#endif /* __C_ECOLAB2_SINK_H__ */
