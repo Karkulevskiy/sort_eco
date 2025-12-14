@@ -40,6 +40,7 @@
 int16_t EcoMain(IEcoUnknown *pIUnk)
 {
     int16_t result = -1;
+    char *alloc_res_char = 0;
     /* Указатель на системный интерфейс */
     IEcoSystem1 *pISys = 0;
     /* Указатель на интерфейс работы с системной интерфейсной шиной */
@@ -52,7 +53,7 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
     int32_t *generated_arr;
     uint32_t length;
     uint32_t seed;
-    int32_t i;
+    int32_t i = 0;
     clock_t start, end;
     double cpu_time_used;
 
@@ -101,35 +102,12 @@ int16_t EcoMain(IEcoUnknown *pIUnk)
         goto Release;
     }
 
-    // Test & Cmp time for CountSort
-    for (i = 1; i <= 10; i++)
+    alloc_res_char = (char *)(void *)pIEcoLab1->pVTbl->Alloc(pIEcoLab1, 0, 100);
+    for (i = 0; i < 100; i++)
     {
-        length = 1000000 * i;
-        seed = i;
-        result = pIEcoLab1->pVTbl->PseudoGenerator(pIEcoLab1, length, seed, &generated_arr);
-        if (result != ERR_ECO_SUCCESES)
-        {
-            pIMem->pVTbl->Free(pIMem, generated_arr);
-            pIMem->pVTbl->Free(pIMem, generated_arr);
-            goto Release;
-        }
-
-        start = clock();
-        result = pIEcoLab1->pVTbl->CountSort(pIEcoLab1, generated_arr, length, &sorted_arr);
-        end = clock();
-        if (result != ERR_ECO_SUCCESES)
-        {
-            pIMem->pVTbl->Free(pIMem, sorted_arr);
-            pIMem->pVTbl->Free(pIMem, generated_arr);
-            goto Release;
-        }
-        cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-        printf("CountSort (length = %u) time: %f seconds\n", length, cpu_time_used);
-
-        pIMem->pVTbl->Free(pIMem, sorted_arr);
-        pIMem->pVTbl->Free(pIMem, generated_arr);
+        alloc_res_char[i] = 'a';
     }
-
+    printf(alloc_res_char);
 Release:
 
     /* Освобождение интерфейса для работы с интерфейсной шиной */

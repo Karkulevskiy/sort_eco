@@ -39,6 +39,11 @@ typedef struct CEcoLab1
     /* Системный интерфейс */
     IEcoSystem1 *m_pISys;
 
+    // Пул памяти как статический массив байт
+    uint8_t memory_pool[POOL_SIZE];
+
+    Block *first_block;
+
 } CEcoLab1, *CEcoLab1Ptr;
 
 /* Инициализация экземпляра */

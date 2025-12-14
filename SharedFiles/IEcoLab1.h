@@ -26,6 +26,14 @@
 
 #include "IEcoBase1.h"
 
+#define POOL_SIZE 1024
+
+typedef struct Block
+{
+    size_t size; // Размер полезной области
+    int free;    // 1 – свободен, 0 – занят
+} Block;
+
 /* IEcoLab1 IID = {277FC00C-3562-4096-AFCF-C125B94EEC90} */
 #ifndef __IID_IEcoLab1
 static const UGUID IID_IEcoLab1 = {0x01, 0x10, {0x27, 0x7F, 0xC0, 0x0C, 0x35, 0x62, 0x40, 0x96, 0xAF, 0xCF, 0xC1, 0x25, 0xB9, 0x4E, 0xEC, 0x90}};
@@ -41,10 +49,8 @@ typedef struct IEcoLab1VTbl
     uint32_t(ECOCALLMETHOD *AddRef)(/* in */ IEcoLab1Ptr_t me);
     uint32_t(ECOCALLMETHOD *Release)(/* in */ IEcoLab1Ptr_t me);
 
-    // CountSort
-    int16_t(ECOCALLMETHOD *CountSort)(/* in */ IEcoLab1Ptr_t me, /* in */ int32_t *inputArray, /* in */ uint32_t length, /* out */ int32_t **sortedArray);
-    // Pseude rand generator
-    int16_t(ECOCALLMETHOD *PseudoGenerator)(/* in */ IEcoLab1Ptr_t me, /* in */ uint32_t length, /* in */ uint32_t seed, /* out */ int32_t **generatedArray);
+    void *(ECOCALLMETHOD *Alloc)(/* in */ IEcoLab1Ptr_t me, /* in */ uint64_t addrVirtual, /* in */ uint32_t size);
+    void(ECOCALLMETHOD *Free)(/* in */ IEcoLab1Ptr_t me, /* in */ void *ptr);
 } IEcoLab1VTbl, *IEcoLab1VTblPtr;
 
 interface IEcoLab1

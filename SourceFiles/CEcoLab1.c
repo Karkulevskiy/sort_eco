@@ -119,10 +119,84 @@ static uint32_t ECOCALLMETHOD CEcoLab1_Release(/* in */ IEcoLab1Ptr_t me)
     return pCMe->m_cRef;
 }
 
+// Вспомогательная функция: возвращает указатель на данные блока
+static void *block_data(Block *b)
+{
+    return (void *)((uint8_t *)b + sizeof(Block));
+}
+
+// Вспомогательная функция: возвращает блок по указателю на данные
+static Block *data_to_block(void *ptr)
+{
+    return (Block *)((uint8_t *)ptr - sizeof(Block));
+}
+
 /*
  *
  * <сводка>
- *   Функция MyFunction
+ *   Функция Alloc
+ * </сводка>
+ *
+ * <описание>
+ *   Функция возвращает адрес страницы
+ * </описание>
+ *
+ */
+void *ECOCALLMETHOD CEcoLab1_Alloc(/* in */ IEcoLab1Ptr_t me, /* in */ uint64_t addrVirtual, /* in */ uint32_t size)
+{
+    CEcoLab1 *pCMe = (CEcoLab1 *)me;
+    Block *best_block = NULL;
+    Block *current = pCMe->first_block;
+    uint8_t *next = 0;
+    size_t max_free_size = 0;
+    size_t remaining = 0;
+
+    if (size == 0)
+        return NULL;
+
+    // Проходим по всем блокам
+    while ((uint8_t *)current < pCMe->memory_pool + POOL_SIZE)
+    {
+        if (current->free && current->size >= size)
+        {
+            if (current->size > max_free_size)
+            {
+                max_free_size = current->size;
+                best_block = current;
+            }
+        }
+
+        // Переход к следующему блоку
+        next = (uint8_t *)current + sizeof(Block) + current->size;
+        if (next >= pCMe->memory_pool + POOL_SIZE)
+            break;
+        current = (Block *)next;
+    }
+
+    if (best_block == NULL)
+    {
+        return NULL; // Нет подходящего блока
+    }
+
+    // Разделяем блок, если остаток достаточно велик для нового блока
+    remaining = best_block->size - size;
+    if (remaining >= sizeof(Block) + 1)
+    { // +1 чтобы был хотя бы 1 байт данных
+        Block *new_block = (Block *)((uint8_t *)best_block + sizeof(Block) + size);
+        new_block->size = remaining - sizeof(Block);
+        new_block->free = 1;
+
+        best_block->size = size;
+    }
+
+    best_block->free = 0;
+    return block_data(best_block);
+}
+
+/*
+ *
+ * <сводка>
+ *   Функция Free
  * </сводка>
  *
  * <описание>
@@ -130,111 +204,14 @@ static uint32_t ECOCALLMETHOD CEcoLab1_Release(/* in */ IEcoLab1Ptr_t me)
  * </описание>
  *
  */
-
-static int16_t ECOCALLMETHOD CEcoLab1_PseudoGenerator(
-    /* in */ IEcoLab1Ptr_t me,
-    /* in */ uint32_t length,
-    /* in */ uint32_t seed,
-    /* out */ int32_t **generatedArray)
+void ECOCALLMETHOD CEcoLab1_Free(/* in */ IEcoLab1Ptr_t me, /* in */ void *ptr)
 {
-    CEcoLab1 *pCMe = (CEcoLab1 *)me;
-    int32_t *outputArray;
-    int32_t i;
-    if (me == 0 || length == 0)
-    {
-        return ERR_ECO_POINTER;
-    }
-    outputArray = (uint32_t *)pCMe->m_pIMem->pVTbl->Alloc(pCMe->m_pIMem, length * sizeof(uint32_t));
-    if (outputArray == 0)
-    {
-        return ERR_ECO_OUTOFMEMORY;
-    }
-    for (i = 0; i < length; i++)
-    {
-        outputArray[i] = ((i + 1) * seed * 42 + 228) % 1007;
-    }
-
-    *generatedArray = outputArray;
-
-    return ERR_ECO_SUCCESES;
+    Block *b = 0;
+    if (ptr == NULL)
+        return;
+    b = data_to_block(ptr);
+    b->free = 1;
 }
-
-static int16_t ECOCALLMETHOD CEcoLab1_CountSort(
-    /* in */ IEcoLab1Ptr_t me,
-    /* in */ int32_t *inputArray,
-    /* in */ uint32_t length,
-    /* out */ int32_t **sortedArray)
-{
-    CEcoLab1 *pCMe = (CEcoLab1 *)me;
-    int32_t min;
-    int32_t max;
-    uint32_t range;
-    uint32_t *countedArray;
-    int32_t *outputArray;
-    int32_t i;
-    int32_t j;
-    uint32_t outputIndex;
-
-    if (me == 0 || inputArray == 0 || sortedArray == 0 || length == 0)
-    {
-        return ERR_ECO_POINTER;
-    }
-
-    // Находим мин и макс
-    min = inputArray[0];
-    max = inputArray[0];
-    for (i = 1; i < length; i++)
-    {
-        if (inputArray[i] < min)
-            min = inputArray[i];
-        if (inputArray[i] > max)
-            max = inputArray[i];
-    }
-
-    range = max - min + 1;
-
-    // Создать массив подсчётов
-    countedArray = (uint32_t *)pCMe->m_pIMem->pVTbl->Alloc(pCMe->m_pIMem, range * sizeof(uint32_t));
-    if (countedArray == 0)
-    {
-        return ERR_ECO_OUTOFMEMORY;
-    }
-    // Инициализировать нулями
-    for (i = 0; i < range; ++i)
-    {
-        countedArray[i] = 0;
-    }
-    // Считаем кол-во элементов
-    for (i = 0; i < length; i++)
-    {
-        countedArray[inputArray[i] - min]++;
-    }
-    // Создать результирующий массив
-    outputArray = (int32_t *)pCMe->m_pIMem->pVTbl->Alloc(pCMe->m_pIMem, length * sizeof(int32_t));
-    if (outputArray == 0)
-    {
-        pCMe->m_pIMem->pVTbl->Free(pCMe->m_pIMem, countedArray);
-        return ERR_ECO_OUTOFMEMORY; // TODO подумать над ошибкой
-    }
-
-    // Заполняем результирующий массив
-    outputIndex = 0;
-    for (i = 0; i < range; i++)
-    {
-        for (j = 0; j < countedArray[i]; j++)
-        {
-            outputArray[outputIndex++] = i + min;
-        }
-    }
-
-    // Чистим память от массива подсчётов
-    pCMe->m_pIMem->pVTbl->Free(pCMe->m_pIMem, countedArray);
-
-    *sortedArray = outputArray;
-
-    return ERR_ECO_SUCCESES;
-}
-
 /*
  *
  * <сводка>
@@ -284,8 +261,8 @@ IEcoLab1VTbl g_x277FC00C35624096AFCFC125B94EEC90VTbl = {
     CEcoLab1_QueryInterface,
     CEcoLab1_AddRef,
     CEcoLab1_Release,
-    CEcoLab1_CountSort,
-    CEcoLab1_PseudoGenerator};
+    CEcoLab1_Alloc,
+    CEcoLab1_Free};
 
 /*
  *
@@ -356,6 +333,10 @@ int16_t ECOCALLMETHOD createCEcoLab1(/* in */ IEcoUnknown *pIUnkSystem, /* in */
 
     /* Установка счетчика ссылок на компонент */
     pCMe->m_cRef = 1;
+
+    pCMe->first_block = (Block *)pCMe->memory_pool;
+    pCMe->first_block->size = POOL_SIZE - sizeof(Block);
+    pCMe->first_block->free = 1;
 
     /* Создание таблицы функций интерфейса IEcoLab1 */
     pCMe->m_pVTblIEcoLab1 = &g_x277FC00C35624096AFCFC125B94EEC90VTbl;
