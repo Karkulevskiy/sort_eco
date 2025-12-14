@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/HeaderFiles",
+                "${workspaceFolder}/SharedFiles",
+                "${env:ECO_FRAMEWORK}/Eco.Core1/SharedFiles",
+                "${env:ECO_FRAMEWORK}/Eco.InterfaceBus1/SharedFiles",
+                "${env:ECO_FRAMEWORK}/Eco.System1/SharedFiles",
+                "${env:ECO_FRAMEWORK}/Eco.MemoryManager1/SharedFiles",
+                "${env:ECO_FRAMEWORK}/Eco.FileSystemManagement1/SharedFiles"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ]
+        }
+    ],
+    "version": 4
+}
